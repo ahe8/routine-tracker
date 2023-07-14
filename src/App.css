@@ -44,3 +44,11 @@
 .calendarBox {
   display: solid 1px black;
 }
+
+.on{
+  color:red;
+}
+
+.off{
+  color:black;
+}
