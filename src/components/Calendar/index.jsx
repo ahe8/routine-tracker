@@ -7,8 +7,8 @@ export default function Calendar() {
 
     return (
         <div className="calendar">
-            <CalendarHeader date={date}/>
-            <Habits date={date}/>
+            <CalendarHeader date={date} />
+            <Habits date={date} />
         </div>
     )
 }

@@ -1,9 +1,9 @@
-import {useRef, useState, useEffect} from 'react';
-import {getNumberOfDaysInMonth} from "../utils"
+import { useState, useEffect } from 'react';
+import { getNumberOfDaysInMonth } from "../../../../utils"
 import HabitBox from "./HabitBox";
-import {calendarBoxStyle} from "../utils";
+import { calendarBoxStyle } from "../../../../utils";
 
-export default function Habit(props){
+export default function Habit(props) {
     const [habit, setHabit] = useState({});
     const [habitRow, setHabitRow] = useState([]);
 
@@ -35,7 +35,7 @@ export default function Habit(props){
             if (box) {
                 currStreak++;
                 maxStreak = currStreak > maxStreak ? currStreak : maxStreak;
-            } else{
+            } else {
                 currStreak = 0;
             }
         })
@@ -47,7 +47,7 @@ export default function Habit(props){
         let boxes = new Array(numberOfDaysInMonth).fill(false);;
         if (props.habitStates && props.habitStates[MMYY]) {
             boxes = props.habitStates[MMYY];
-        } 
+        }
 
         let newRow = []
 
@@ -55,9 +55,9 @@ export default function Habit(props){
             <span>{props.habitName}</span>
         )
 
-        for(let day = 0; day < numberOfDaysInMonth; day++) {
+        for (let day = 0; day < numberOfDaysInMonth; day++) {
             newRow.push(
-                <HabitBox 
+                <HabitBox
                     key={day}
                     id={day}
                     // toggle={toggle} 
@@ -67,11 +67,11 @@ export default function Habit(props){
 
         newRow.push(<span id="currStreak">{getCurrStreak(props.date)}</span>)
         newRow.push(<span id="maxStreak">{getMaxStreak(boxes)}</span>)
-            
-        setHabitRow([newRow]);         
-    }, [habit]) 
 
-    
+        setHabitRow([newRow]);
+    }, [habit])
+
+
     return (
         <div style={calendarBoxStyle(numberOfDaysInMonth)}>
             {habitRow}

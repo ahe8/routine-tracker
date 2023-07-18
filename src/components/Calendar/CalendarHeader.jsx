@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {daysMap, calendarBoxStyle, getNumberOfDaysInMonth} from '../utils'
+import { daysMap, calendarBoxStyle, getNumberOfDaysInMonth } from '../../utils'
 
 export default function CalendarHeader({ date }) {
     const [calendarHeaders, setCalendarHeaders] = useState([]);
@@ -20,7 +20,7 @@ export default function CalendarHeader({ date }) {
             daysInMonth.push(<span className="calendarBox" id={day}>{day}</span>)
         }
 
-        let daysOfWeekInit = 
+        let daysOfWeekInit =
             <div key="0" style={calendarBoxStyle(numberOfDaysInMonth)}>
                 <h3>Day</h3>
                 {daysOfWeek}
@@ -28,7 +28,7 @@ export default function CalendarHeader({ date }) {
                 <h4>Max Streak</h4>
             </div>
 
-        let calendarInit = 
+        let calendarInit =
             <div key="1" style={calendarBoxStyle(numberOfDaysInMonth)}>
                 <h3>Habit</h3>
                 {daysInMonth}

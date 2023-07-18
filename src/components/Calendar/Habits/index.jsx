@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { calendarStyle, calendarBoxStyle, getNumberOfDaysInMonth } from "../utils";
+import { calendarStyle, calendarBoxStyle, getNumberOfDaysInMonth } from "../../../utils";
 import Habit from "./Habit"
 import mockdata from '/mockdata'
 
@@ -35,9 +35,9 @@ export default function Habits({ date }) {
 
             let newHabit = {
                 habitName: newHabitName,
-                [MMYY]:boxes
+                [MMYY]: boxes
             }
-        
+
             setHabits(prevHabits => [...prevHabits, newHabit]);
             toggle();
         }

@@ -1,8 +1,10 @@
+import { Link } from "react-router-dom"
+
 export default function Header() {
-    return(
+    return (
         <header>
             <h3>Routine Tracker</h3>
-            <p>Login</p>
+            <Link to="/login">Login</Link>
         </header>
     )
 }
