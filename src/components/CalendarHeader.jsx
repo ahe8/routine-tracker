@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { daysMap, calendarBoxStyle, getNumberOfDaysInMonth } from '../../utils'
+import { daysMap, calendarBoxStyle, getNumberOfDaysInMonth } from '../utils'
 
 export default function CalendarHeader({ date }) {
     const [calendarHeaders, setCalendarHeaders] = useState([]);

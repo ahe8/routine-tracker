@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { getNumberOfDaysInMonth } from "../../../../utils"
+import { getNumberOfDaysInMonth } from "../utils"
 import HabitBox from "./HabitBox";
-import { calendarBoxStyle } from "../../../../utils";
+import { calendarBoxStyle } from "../utils";
 
 export default function Habit(props) {
     const [habit, setHabit] = useState({});
