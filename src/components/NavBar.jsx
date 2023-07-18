@@ -20,7 +20,7 @@ const NavBar = () => {
       };
 
 
-    return (<Grid container direction="row" justifyContent="flex-end" alignItems="center" height={"100%"}>
+    return (<Grid container direction="row" justifyContent="center" alignItems="center" height={"100%"}>
         <Grid><Box display="flex" >
     <Typography variant="p" component="p" fontSize={15} marginRight={1}>
       Hello
