@@ -1,6 +1,7 @@
 import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login"
+import NavBar from './components/NavBar';
 import Layout from "./components/Layout"
 
 function App() {
@@ -11,6 +12,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/navBar" element={<NavBar />} />
+          
         </Routes>
       </BrowserRouter>
     </>
