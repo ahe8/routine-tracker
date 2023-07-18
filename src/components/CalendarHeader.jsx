@@ -24,14 +24,14 @@ export default function CalendarHeader({ date }) {
             <div key="0" style={calendarBoxStyle(numberOfDaysInMonth)}>
                 <h3>Day</h3>
                 {daysOfWeek}
+                <h4>Current Streak</h4>
+                <h4>Max Streak</h4>
             </div>
 
         let calendarInit = 
             <div key="1" style={calendarBoxStyle(numberOfDaysInMonth)}>
                 <h3>Habit</h3>
                 {daysInMonth}
-                <h4>Current Streak</h4>
-                <h4>Max Streak</h4>
             </div>
 
         setCalendarHeaders([daysOfWeekInit, calendarInit]);

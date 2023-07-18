@@ -1,13 +1,16 @@
-import {useState} from "react";
+import { useState } from "react";
 
-export default function HabitBox() {
-    const [isChecked, setIsChecked] = useState(false);
-
-    function toggle() {
+export default function HabitBox(props) {
+    const [isChecked, setIsChecked] = useState(props.checked);
+    
+    function toggle () {
         setIsChecked(prevState => !prevState);
     }
 
-    return(
-        <span className={isChecked ? "on" : "off"} onClick={toggle}></span>
+    return (
+        <span 
+            className={isChecked ? "on" : "off"} 
+            onClick={toggle}>
+        </span>
     )
 }
