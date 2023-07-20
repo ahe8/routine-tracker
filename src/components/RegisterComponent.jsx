@@ -8,7 +8,7 @@ export const RegisterComponent = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(email, pass);
+        console.log(name, email, pass);
     }
 
     return (
@@ -16,7 +16,7 @@ export const RegisterComponent = (props) => {
             <h2>Register</h2>
             <form className="register-form" onSubmit={handleSubmit}>
                 <label htmlFor="name">Full name</label>
-                <input value={name} name={name} id="name" placeholder="Full name"></input>
+                <input value={name} onChange={(e) => setName(e.target.value)} type="name" placeholder="Full name" id="name" name= "name"></input>
                 <label htmlFor="email">Email</label>
                 <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email@email.com" id="email" name="email"/>
                 <label htmlFor="password">Password</label>
