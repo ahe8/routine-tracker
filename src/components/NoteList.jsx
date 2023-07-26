@@ -1,8 +1,8 @@
 import NoteShow from "./NoteShow";
 
-function NoteList({ notes }) {
+function NoteList({ notes, onDelete }) {
   const renderedNotes = notes?.map((note) => {
-    return <NoteShow key={note.id} note={note} />;
+    return <NoteShow onDelete={onDelete} key={note.id} note={note} />;
   });
 
   return <div>{renderedNotes}</div>;

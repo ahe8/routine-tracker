@@ -6,6 +6,13 @@ import NoteList from "./NoteList";
 function Notes() {
   const [notes, setNotes] = useState([]);
 
+  const deleteNoteById = (id) => {
+    const updateNotes = notes.filter((note) => {
+      return note.id != id;
+    });
+    setNotes(updateNotes);
+  };
+
   const createNote = (contents) => {
     const updateNotes = [
       ...notes,
@@ -27,7 +34,7 @@ function Notes() {
         <NoteCreate onCreate={createNote} />
       </Grid>
       <Grid item xs={12}>
-        <NoteList notes={notes} />
+        <NoteList notes={notes} onDelete={deleteNoteById} />
       </Grid>
     </Grid>
   );
