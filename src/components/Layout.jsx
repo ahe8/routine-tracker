@@ -1,6 +1,7 @@
 import Calendar from "./Calendar"
 import Header from "./Header"
 import NavBar from './NavBar'
+import Notes from './Notes'
 
 export default function Layout() {
     return (
@@ -8,6 +9,7 @@ export default function Layout() {
         <NavBar/>
             <Header />
             <Calendar />
+            <Notes/>    
         </>
     )
 }
