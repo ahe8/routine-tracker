@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Box, Grid, Typography, Popover, Button } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import NoteCreate from "./NoteCreate";
 import NoteList from "./NoteList";
 function Notes() {
