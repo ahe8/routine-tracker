@@ -57,7 +57,7 @@ function NoteShow({ note, onDelete, onEdit }) {
             <IconButton
               onClick={handleDeleteClick}
               aria-label="delete"
-              color={theme.primary.standard}
+              color={theme.primary}
             >
               <DeleteIcon />
             </IconButton>
