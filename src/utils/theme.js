@@ -3,21 +3,17 @@ import { createTheme } from "@mui/material/styles";
 export const defaultTheme = createTheme({
   // Color
   primary: {
-    lighter: "#BEF3FF",
-    light: "#7DD8FF",
-    standard: "#5DA0C3",
-    dark: "#103B4E",
-    darker: "",
-
-    contrast: "#5758BB",
-
+    background: "#1a1a1a",
+    lighter: "#cdc5e5",
+    light: "#8d7ac3",
+    standard: "#5d43a9",
+    dark: "#3d3191",
     white: "#FFF",
   },
   secondary: {
-    lighter: "#bef3ff",
-    light: "#7dd8ff",
-    standard: "#27B2ED",
-    dark: "#0B8AC0",
+    light: "#d5dae7",
+    standard: "#9296a3",
+    dark: "#565a66",
     darker: "",
   },
 });
