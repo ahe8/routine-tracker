@@ -88,7 +88,7 @@ function NoteCreate({ onCreate }) {
                       onChange={handleChange}
                     />
                   </Grid>
-                  <Grid marginLeft={3}>
+                  <Grid marginLeft={3} marginBottom={1}>
                     <Button variant="outlined" onClick={handleSubmit}>
                       Save
                     </Button>

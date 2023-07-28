@@ -10,7 +10,6 @@ function App() {
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-        {/* <GlobalStyles styles={{ body: { backgroundColor: "black" } }} /> */}
         <CssBaseline>
           <BrowserRouter>
             <Routes>
