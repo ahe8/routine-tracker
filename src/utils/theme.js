@@ -18,36 +18,16 @@ export const defaultTheme = createTheme({
   },
 
   //Button
-
-  // components: {
-  //   MuiButtonBase: {
-  //     variants: [
-  //       {
-  //         props: { variant: "outlined" },
-  //         style: {
-  //           color: "#8d7ac3",
-  //           borderColor: "#8d7ac3",
-  //           "&:hover": {
-  //             color: "#3d3191",
-  //             backgroundColor: "#8d7ac3",
-  //             borderColor: "#8d7ac3",
-  //           },
-  //         },
-  //       },
-  //     ],
-  //   },
-  // },
-
   components: {
     MuiButton: {
       styleOverrides: {
         root: ({ theme }) => ({
           color: theme.primary.light,
-          borderColor: "#8d7ac3",
+          borderColor: theme.primary.light,
           "&:hover": {
-            color: "#3d3191",
-            backgroundColor: "#8d7ac3",
-            borderColor: "#8d7ac3",
+            color: theme.primary.dark,
+            backgroundColor: theme.primary.light,
+            borderColor: theme.primary.light,
           },
         }),
       },
