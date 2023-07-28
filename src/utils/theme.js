@@ -13,8 +13,8 @@ export const defaultTheme = createTheme({
   secondary: {
     light: "#d5dae7",
     standard: "#9296a3",
-    dark: "#565a66",
-    darker: "",
+    dark: "#424242",
+    darker: "#212121",
   },
 
   //Button
@@ -29,6 +29,27 @@ export const defaultTheme = createTheme({
             backgroundColor: theme.primary.light,
             borderColor: theme.primary.light,
           },
+        }),
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          "& .MuiOutlinedInput-input": {
+            color: theme.primary.font,
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: theme.secondary.dark,
+            },
+          },
+          "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.primary.font,
+          },
+          "& .MuiOutlinedInput-root.Mui-focused  .MuiOutlinedInput-notchedOutline":
+            {
+              borderColor: theme.primary.font,
+            },
         }),
       },
     },

@@ -59,42 +59,46 @@ function NoteCreate({ onCreate }) {
               }}
               open={Boolean(anchorEl)}
             >
-              <form noValidate>
-                <Box
-                  component="form"
-                  sx={{
-                    "& .MuiTextField-root": { m: 3, width: "50ch" },
-                  }}
-                  noValidate
-                  autoComplete="off"
-                >
-                  <Grid itme xs={12}>
-                    <Typography
-                      variant="p"
-                      component="p"
-                      fontSize={15}
-                      marginLeft={3}
-                      color={theme.primary.standard}
-                    >
-                      Create New Note
-                    </Typography>
-                    <TextField
-                      id="outlined-multiline-static"
-                      label="Note"
-                      multiline
-                      rows={4}
-                      placeholder="Write your thoughts"
-                      value={note}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid marginLeft={3} marginBottom={1}>
-                    <Button variant="outlined" onClick={handleSubmit}>
-                      Save
-                    </Button>
-                  </Grid>
-                </Box>
-              </form>
+              <Grid sx={{ backgroundColor: theme.secondary.darker }} p={1}>
+                <form noValidate>
+                  <Box
+                    component="form"
+                    sx={{
+                      "& .MuiTextField-root": { m: 3, width: "50ch" },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                  >
+                    <Grid itme xs={12}>
+                      <Typography
+                        variant="p"
+                        component="p"
+                        fontSize={15}
+                        marginLeft={3}
+                        color={theme.primary.light}
+                      >
+                        Create New Note
+                      </Typography>
+                      <TextField
+                        id="outlined-multiline-static"
+                        // InputProps={{
+                        //   inputProps: { style: { color: "#fff" } },
+                        // }}
+                        multiline
+                        rows={4}
+                        placeholder="Write your thoughts"
+                        value={note}
+                        onChange={handleChange}
+                      />
+                    </Grid>
+                    <Grid marginLeft={3}>
+                      <Button variant="outlined" onClick={handleSubmit}>
+                        Save
+                      </Button>
+                    </Grid>
+                  </Box>
+                </form>
+              </Grid>
             </Popover>
           )}
         </Box>

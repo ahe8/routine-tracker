@@ -42,10 +42,6 @@ function NoteShow({ note, onDelete, onEdit }) {
     </Grid>
   );
 
-  // if (showEdit) {
-  //   content = <NoteEdit onSubmit={handleSubmit} note={note} />;
-  // }
-
   return (
     <Grid display="flex" justifyContent="center" alignItems="center">
       <Box sx={{ width: 1000, border: 1, p: 1, m: 1 }}>
@@ -100,6 +96,10 @@ function NoteShow({ note, onDelete, onEdit }) {
                   vertical: "top",
                   horizontal: "left",
                 }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
                 open={Boolean(anchorEl)}
               >
                 <Grid
@@ -109,6 +109,7 @@ function NoteShow({ note, onDelete, onEdit }) {
                   alignItems="center"
                   item
                   xs={12}
+                  sx={{ backgroundColor: theme.secondary.darker }}
                 >
                   <NoteEdit onSubmit={handleSubmit} note={note} />
                 </Grid>
