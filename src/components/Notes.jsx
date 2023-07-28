@@ -35,11 +35,7 @@ function Notes() {
 
   return (
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-      <Grid item xs={12} justifyContent="flex-start" alignItems="center">
-        <Typography variant="p" component="p" fontSize={15} marginRight={1}>
-          Notes
-        </Typography>
-      </Grid>
+      <Grid item xs={12} justifyContent="flex-start" alignItems="center"></Grid>
       <Grid item xs={12}>
         {" "}
         <NoteCreate onCreate={createNote} />
