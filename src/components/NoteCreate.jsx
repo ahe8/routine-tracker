@@ -11,7 +11,6 @@ import { useTheme } from "@mui/material/styles";
 function NoteCreate({ onCreate }) {
   const theme = useTheme();
   const [note, setNote] = useState("");
-
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handlePopoverOpen = (event) => {
@@ -81,9 +80,6 @@ function NoteCreate({ onCreate }) {
                       </Typography>
                       <TextField
                         id="outlined-multiline-static"
-                        // InputProps={{
-                        //   inputProps: { style: { color: "#fff" } },
-                        // }}
                         multiline
                         rows={4}
                         placeholder="Write your thoughts"

@@ -6,6 +6,7 @@ import NoteEdit from "./NoteEdit";
 import { Grid, Typography, IconButton, Box, Popover } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/EditOutlined";
+import { getFormattedDate } from "../utils/constants";
 
 //Style
 import { useTheme } from "@mui/material/styles";
@@ -34,6 +35,10 @@ function NoteShow({ note, onDelete, onEdit }) {
     handlePopoverClose();
   };
 
+  //get date
+  const todayDate = getFormattedDate();
+
+  // get contents on the note
   let content = (
     <Grid>
       <Typography variant="p" component="p" fontSize={15} marginRight={1}>
@@ -61,7 +66,7 @@ function NoteShow({ note, onDelete, onEdit }) {
               fontSize={15}
               marginRight={1}
             >
-              Date
+              {todayDate}
             </Typography>
           </Grid>
           <Grid
