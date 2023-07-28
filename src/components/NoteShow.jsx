@@ -3,8 +3,8 @@ import NoteEdit from "./NoteEdit";
 
 //Components
 import { Grid, Typography, IconButton, Box } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutline";
+import EditIcon from "@mui/icons-material/EditOutlined";
 
 //Style
 import { useTheme } from "@mui/material/styles";
@@ -25,7 +25,13 @@ function NoteShow({ note, onDelete, onEdit }) {
     onEdit(id, newContents);
   };
 
-  let content = <h3>{note.contents}</h3>;
+  let content = (
+    <Grid>
+      <Typography variant="p" component="p" fontSize={15} marginRight={1}>
+        {note.contents}
+      </Typography>
+    </Grid>
+  );
   if (showEdit) {
     content = <NoteEdit onSubmit={handleSubmit} note={note} />;
   }
@@ -42,7 +48,13 @@ function NoteShow({ note, onDelete, onEdit }) {
             justifyContent="flex-start"
             alignItems="center"
           >
-            <Typography variant="p" component="p" fontSize={15} marginRight={1}>
+            <Typography
+              variant="p"
+              component="p"
+              color={theme.primary.light}
+              fontSize={15}
+              marginRight={1}
+            >
               Date
             </Typography>
           </Grid>
@@ -57,7 +69,7 @@ function NoteShow({ note, onDelete, onEdit }) {
             <IconButton
               onClick={handleDeleteClick}
               aria-label="delete"
-              color={theme.primary}
+              color="secondary"
             >
               <DeleteIcon />
             </IconButton>
@@ -65,7 +77,7 @@ function NoteShow({ note, onDelete, onEdit }) {
             <IconButton
               onClick={handleEditClick}
               aria-label="edit"
-              color="info"
+              color="secondary"
             >
               <EditIcon />
             </IconButton>

@@ -3,15 +3,23 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
 
+import { ThemeProvider, CssBaseline, GlobalStyles } from "@mui/material";
+import { defaultTheme } from "./utils/theme";
+
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </BrowserRouter>
+      <ThemeProvider theme={defaultTheme}>
+        {/* <GlobalStyles styles={{ body: { backgroundColor: "black" } }} /> */}
+        <CssBaseline>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Layout />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </BrowserRouter>
+        </CssBaseline>
+      </ThemeProvider>
     </>
   );
 }

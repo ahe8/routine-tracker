@@ -1,9 +1,15 @@
 import React from "react";
 import { useState } from "react";
+
+//Components
 import { Box, Grid, Typography, Popover, Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 
+//Style
+import { useTheme } from "@mui/material/styles";
+
 function NoteCreate({ onCreate }) {
+  const theme = useTheme();
   const [note, setNote] = useState("");
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -41,6 +47,7 @@ function NoteCreate({ onCreate }) {
             {" "}
             + New Note
           </Button>
+
           {anchorEl && (
             <Popover
               id="new-note"
@@ -67,6 +74,7 @@ function NoteCreate({ onCreate }) {
                       component="p"
                       fontSize={15}
                       marginLeft={3}
+                      color={theme.primary.standard}
                     >
                       Create New Note
                     </Typography>
