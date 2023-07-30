@@ -1,12 +1,15 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Grid, Typography, Popover } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-const NavBar = () => {
-  const userInfo = { userEmail: "sinhyerim@gmail.com" };
+import { useAuth } from "../contexts/AuthContext"
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+const NavBar = () => {
+  const [userFirstName, setUserFirstName] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const currUser = useAuth().currentUser;
+
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -15,6 +18,16 @@ const NavBar = () => {
   const handlePopoverClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    try {
+      fetch(`http://localhost:5000/${currUser.uid}`)
+        .then(res => res.json())
+        .then(data => setUserFirstName(data.rows[0]['first_name']));
+    } catch (err) {
+      console.log(err);
+    }
+  }, [])
 
   return (
     <Grid
@@ -36,7 +49,7 @@ const NavBar = () => {
             fontWeight={"500"}
             marginRight={1}
           >
-            {userInfo.userEmail}
+            {userFirstName}
           </Typography>
           <AccountCircleIcon
             sx={{ fontSize: "25px" }}

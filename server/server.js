@@ -7,11 +7,33 @@ const pool = require("./db");
 app.use(cors());
 app.use(express.json());
 
-// create a routine
-app.post("/routines", async (req, res) => {
+//create user
+app.post("/register", async(req, res) => {
     try {
-        const {routine_name} = req.body;
-        const newRoutine = await pool.query("INSERT INTO routine (routine_name) VALUES($1) RETURNING *", [routine_name]);
+        const {email, firebase_id, first_name} = req.body;
+        const newUser = await pool.query("INSERT into users(email, firebase_id, first_name) VALUES($1, $2, $3) RETURNING user_id", [email, firebase_id, first_name]);
+        res.json(newUser);
+    } catch(err) {
+        console.error(err.message);
+    }
+})
+
+
+// get user's first name
+app.get("/:uid", async(req, res) => {
+    try {
+        const firstName = await pool.query("SELECT first_name from users WHERE firebase_id = $1", [req.params.uid])
+        res.json(firstName);
+    } catch(err) {
+        console.error(err.message);
+    }   
+})
+
+//create a routine
+app.post("/:uid/routines", async (req, res) => {
+    try {
+        const {user_id, routine_name} = req.body;
+        const newRoutine = await pool.query("INSERT INTO routine (user_id, routine_name) VALUES($1, $2) RETURNING *", [user_id, routine_name]);
         res.json(newRoutine.rows[0]);
     } catch  (err) {
         console.error(err.message);
@@ -20,14 +42,14 @@ app.post("/routines", async (req, res) => {
 
 
 // get all routines
-app.get("/routines", async(req, res) => {
+app.get("/:uid/routines", async(req, res) => {
     try {
-        const allRoutines = await pool.query("SELECT * FROM routine")
+        const user_id = Number(req.params.uid);
+        const allRoutines = await pool.query("SELECT * FROM routine WHERE $1 = user_id", [user_id]);
         res.json(allRoutines.rows);
     } catch (err) {
         console.error(err.message);
     }
-    
 })  
 
 // get a routine
