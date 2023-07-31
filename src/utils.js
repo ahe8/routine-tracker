@@ -15,8 +15,9 @@ export const calendarStyle = (calendarRows) => ({
 
 export const calendarBoxStyle = (numberOfDaysInCurrMonth) => ({
     display: "grid",
-    gridTemplateColumns: `repeat(${numberOfDaysInCurrMonth + 3}, 3em)`
-});
+    gridTemplateColumns: `5em repeat(${numberOfDaysInCurrMonth}, 3em) 5em 5em`
+
+})
 
 export const getNumberOfDaysInMonth = (date) => {
     const year = date.getFullYear();

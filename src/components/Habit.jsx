@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getNumberOfDaysInMonth } from "../utils"
+import { getNumberOfDaysInMonth, calendarBoxStyle } from "../utils"
 import HabitBox from "./HabitBox";
-import { calendarBoxStyle } from "../utils";
 
 export default function Habit(props) {
 
@@ -13,7 +12,7 @@ export default function Habit(props) {
     // debounce
     useEffect(() => {
         const timeoutID = setTimeout(() => {
-            if(initialBoxState !== boxes) {
+            if (initialBoxState !== boxes) {
                 const body = {
                     ...props,
                     routine_mmyy_values: JSON.stringify(boxes)
@@ -26,7 +25,7 @@ export default function Habit(props) {
                         body: JSON.stringify(body)
                     });
 
-                } catch(err) {
+                } catch (err) {
                     console.log(err);
                 }
             }
@@ -34,6 +33,30 @@ export default function Habit(props) {
 
         return () => clearTimeout(timeoutID);
     }, [boxes]);
+
+    useEffect(() => {
+        let newRow = [];
+
+        newRow.push(
+            <span>{routine_name}</span>
+        );
+
+        for (let day = 0; day < boxes.length; day++) {
+            newRow.push(
+                <HabitBox
+                    key={day}
+                    id={day}
+                    toggle={toggle}
+                    checked={boxes[day]}
+                />)
+        };
+
+        newRow.push(<span id="currStreak">{getCurrStreak(props.date)}</span>);
+        newRow.push(<span id="maxStreak">{getMaxStreak(boxes)}</span>);
+
+        setHabitRow([newRow]);
+    }
+        , [boxes])
 
     function toggle(id) {
         setBoxes(prevBoxes => {
@@ -72,29 +95,6 @@ export default function Habit(props) {
         return maxStreak;
     }
 
-    useEffect(() => {
-        let newRow = [];
-
-        newRow.push(
-            <span>{routine_name}</span>
-        );
-
-        for (let day = 0; day < boxes.length; day++) {
-            newRow.push(
-                <HabitBox
-                    key={day}
-                    id={day}
-                    toggle={toggle} 
-                    checked={boxes[day]}
-                />)
-        };
-
-        newRow.push(<span id="currStreak">{getCurrStreak(props.date)}</span>);
-        newRow.push(<span id="maxStreak">{getMaxStreak(boxes)}</span>);
-
-        setHabitRow([newRow]);
-    }
-    , [boxes])
 
 
     return (

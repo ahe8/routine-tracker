@@ -5,7 +5,7 @@ import Notes from "./Notes";
 import { useAuth } from "../contexts/AuthContext";
 
 //Style
-import { GlobalStyles } from "@mui/material";
+import { GlobalStyles, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import LandingPage from "./LandingPage";
 
@@ -25,14 +25,20 @@ export default function Layout() {
       />
       {currUser && <NavBar />}
       <Header />
-      {
-      currUser ? 
-        <>
-          <Calendar />
-          <Notes />
-        </>
-      :
-        <LandingPage/>
+
+      {currUser !== undefined ?
+        (currUser === null ?
+          <>
+            <LandingPage/>
+          </>
+        :
+          <>
+            <Calendar />
+            <Notes />
+          </>
+        )
+        : 
+        <CircularProgress/>
       }
     </>
   );
