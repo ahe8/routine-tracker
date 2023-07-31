@@ -10,7 +10,6 @@ const NavBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const currUser = useAuth().currentUser;
 
-
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -20,14 +19,16 @@ const NavBar = () => {
   };
 
   useEffect(() => {
-    try {
-      fetch(`http://localhost:5000/${currUser.uid}`)
-        .then(res => res.json())
-        .then(data => setUserFirstName(data.rows[0]['first_name']));
-    } catch (err) {
-      console.log(err);
+    if (currUser){
+      try {
+        fetch(`http://localhost:5000/${currUser.uid}`)
+          .then(res => res.json())
+          .then(data => setUserFirstName(data));
+      } catch (err) {
+        console.log(err);
+      }
     }
-  }, [])
+  }, [currUser])
 
   return (
     <Grid

@@ -22,11 +22,9 @@ export const RegisterComponent = (props) => {
 
                 const body = {
                     email: email,
-                    firebase_id: res.user.uid,
+                    user_id: res.user.uid,
                     first_name: name
                 }
-                console.log(name);
-                console.log(body);
 
                 await fetch("http://localhost:5000/register", {
                     method: "POST",

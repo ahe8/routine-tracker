@@ -1,15 +1,15 @@
 CREATE DATABASE routine_database;
 
-CREATE TABLE user(
-    user_id SERIAL PRIMARY KEY,
+CREATE TABLE users(
+    user_id VARCHAR(128) PRIMARY KEY,
     email VARCHAR(255) UNIQUE,
-    first_name VARCHAR(50),
-    firebase_id VARCHAR UNIQUE
+    first_name VARCHAR(50)
 );
 
 CREATE TABLE routine(
     routine_id SERIAL PRIMARY KEY,
-    user_id integer REFERENCES users,
+    user_id VARCHAR(128) REFERENCES users,
     routine_name VARCHAR(255),
-    routine_MMYY JSON
+    routine_mmyy VARCHAR(6),
+    routine_mmyy_values VARCHAR(255)
 );

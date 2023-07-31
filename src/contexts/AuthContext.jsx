@@ -32,7 +32,7 @@ export function AuthProvider({ children }) {
     const value = {
         currentUser,
         signup,
-        signin
+        signin,
     };
     
     return (
