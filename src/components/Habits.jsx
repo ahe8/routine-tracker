@@ -5,21 +5,27 @@ import {
   getNumberOfDaysInMonth,
 } from "../utils";
 import Habit from "./Habit";
-import mockdata from "/mockdata";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Habits({ date }) {
   const [habits, setHabits] = useState([]);
   const [addingHabit, setAddingHabit] = useState(false);
   const [newHabitName, setNewHabitName] = useState("");
+  const currUser = useAuth().currentUser;
 
   useEffect(() => {
-    let testUserID = 1;
-
-    let user = mockdata.find((data) => data["userID"] == testUserID);
-    if (user) {
-      setHabits(user["habits"]);
+    if (currUser) {
+      try {
+        fetch(`http://localhost:5000/${currUser.uid}/routines`)
+          .then(response => response.json())
+          .then(data => {
+            setHabits(data);
+          });
+      } catch (err) {
+        console.log(err);
+      }
     }
-  }, []);
+  }, [currUser]);
 
   function toggle() {
     setAddingHabit((prevState) => !prevState);
@@ -29,24 +35,39 @@ export default function Habits({ date }) {
     setNewHabitName(e.target.value);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    if (newHabitName.trim() !== "") {
-      let MMYY = date.getMonth() + "" + date.getFullYear();
-      let boxes = new Array(getNumberOfDaysInMonth(date)).fill(false);
+    try {
 
-      let newHabit = {
-        habitName: newHabitName,
-        [MMYY]: boxes,
-      };
-
-      setHabits((prevHabits) => [...prevHabits, newHabit]);
-      toggle();
+      if (newHabitName.trim() !== "") {
+        let MMYY = date.getMonth() + "" + date.getFullYear();
+        let boxes = JSON.stringify(new Array(getNumberOfDaysInMonth(date)).fill(false));
+ 
+        const body = {
+          user_id: currUser.uid,
+          routine_name: newHabitName,
+          routine_mmyy: MMYY,
+          routine_mmyy_values: boxes
+        };
+  
+        await fetch(`http://localhost:5000/${currUser.uid}/routines`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        })
+        .then(() => {
+          setHabits((prevHabits) => [...prevHabits, body]);
+          toggle();
+        })
+        .catch((err) => console.log(err));
+      }
+    } catch(err) {
+      console.log(err);
     }
   }
 
-  let habitElements = habits.map((habit) => <Habit {...habit} date={date} />);
+  let habitElements = habits.map((habit, i) => <Habit key={i} {...habit} date={date} />);
 
   return (
     <>
@@ -64,8 +85,7 @@ export default function Habits({ date }) {
         </form>
       )}
 
-      {addingHabit && <button onClick={toggle}>Cancel</button>}
-      {!addingHabit && <button onClick={toggle}>Add Habit</button>}
+      {addingHabit ? <button onClick={toggle}>Cancel</button> : <button onClick={toggle}>Add Habit</button>}
     </>
   );
 }

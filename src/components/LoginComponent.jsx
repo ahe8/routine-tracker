@@ -1,12 +1,23 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext"
+
 
 export const LoginComponent = (props) => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
+    const [errMsg, setErrMsg] = useState("");
+    const { signin } = useAuth();
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(email, pass);
+        try{ 
+            await signin(email, pass);
+            navigate('/');
+        } catch(err) {
+            console.log(err);
+        }
     }
 
     return (
@@ -20,6 +31,7 @@ export const LoginComponent = (props) => {
                 <button type="submit">Log In</button>
             </form>
             <button className="link-btn" onClick={()=>props.onFormSwitch("register")}> Register here</button>
+            <h2>{errMsg}</h2>
         </div>
     )
 }
