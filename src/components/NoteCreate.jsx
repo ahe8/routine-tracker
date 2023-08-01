@@ -1,11 +1,16 @@
 import React from "react";
 import { useState } from "react";
+
+//Components
 import { Box, Grid, Typography, Popover, Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 
-function NoteCreate({ onCreate }) {
-  const [note, setNote] = useState("");
+//Style
+import { useTheme } from "@mui/material/styles";
 
+function NoteCreate({ onCreate }) {
+  const theme = useTheme();
+  const [note, setNote] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handlePopoverOpen = (event) => {
@@ -41,6 +46,7 @@ function NoteCreate({ onCreate }) {
             {" "}
             + New Note
           </Button>
+
           {anchorEl && (
             <Popover
               id="new-note"
@@ -52,41 +58,43 @@ function NoteCreate({ onCreate }) {
               }}
               open={Boolean(anchorEl)}
             >
-              <form noValidate>
-                <Box
-                  component="form"
-                  sx={{
-                    "& .MuiTextField-root": { m: 3, width: "50ch" },
-                  }}
-                  noValidate
-                  autoComplete="off"
-                >
-                  <Grid itme xs={12}>
-                    <Typography
-                      variant="p"
-                      component="p"
-                      fontSize={15}
-                      marginLeft={3}
-                    >
-                      Create New Note
-                    </Typography>
-                    <TextField
-                      id="outlined-multiline-static"
-                      label="Note"
-                      multiline
-                      rows={4}
-                      placeholder="Write your thoughts"
-                      value={note}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid marginLeft={3}>
-                    <Button variant="outlined" onClick={handleSubmit}>
-                      Save
-                    </Button>
-                  </Grid>
-                </Box>
-              </form>
+              <Grid sx={{ backgroundColor: theme.secondary.darker }} p={1}>
+                <form noValidate>
+                  <Box
+                    component="form"
+                    sx={{
+                      "& .MuiTextField-root": { m: 3, width: "50ch" },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                  >
+                    <Grid itme xs={12}>
+                      <Typography
+                        variant="p"
+                        component="p"
+                        fontSize={15}
+                        marginLeft={3}
+                        color={theme.primary.light}
+                      >
+                        Create New Note
+                      </Typography>
+                      <TextField
+                        id="outlined-multiline-static"
+                        multiline
+                        rows={4}
+                        placeholder="Write your thoughts"
+                        value={note}
+                        onChange={handleChange}
+                      />
+                    </Grid>
+                    <Grid marginLeft={3}>
+                      <Button variant="outlined" onClick={handleSubmit}>
+                        Save
+                      </Button>
+                    </Grid>
+                  </Box>
+                </form>
+              </Grid>
             </Popover>
           )}
         </Box>

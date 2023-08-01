@@ -4,15 +4,45 @@ import HabitBox from "./HabitBox";
 import { calendarBoxStyle } from "../utils";
 
 export default function Habit(props) {
-    const [habit, setHabit] = useState({});
+
     const [habitRow, setHabitRow] = useState([]);
+    const { routine_id, routine_name, routine_mmyy, routine_mmyy_values } = props;
+    const initialBoxState = JSON.parse(routine_mmyy_values);
+    const [boxes, setBoxes] = useState(initialBoxState);
 
-    const month = props.date.getMonth();
-    const year = props.date.getFullYear();
+    // debounce
+    useEffect(() => {
+        const timeoutID = setTimeout(() => {
+            if(initialBoxState !== boxes) {
+                const body = {
+                    ...props,
+                    routine_mmyy_values: JSON.stringify(boxes)
+                }
 
-    const MMYY = month + "" + year;
+                try {
+                    fetch(`http://localhost:5000/routines/${routine_id}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(body)
+                    });
 
-    const numberOfDaysInMonth = getNumberOfDaysInMonth(props.date);
+                } catch(err) {
+                    console.log(err);
+                }
+            }
+        }, 300);
+
+        return () => clearTimeout(timeoutID);
+    }, [boxes]);
+
+    function toggle(id) {
+        setBoxes(prevBoxes => {
+            // copy array
+            let newBoxes = prevBoxes.slice();
+            newBoxes[id] = !prevBoxes[id];
+            return newBoxes;
+        });
+    }
 
     function getCurrStreak(boxArray) {
         let streak = 0;
@@ -23,7 +53,6 @@ export default function Habit(props) {
         while (day >= 0 && boxArray[day--]) {
             streak++;
         }
-
         return streak;
     }
 
@@ -44,36 +73,32 @@ export default function Habit(props) {
     }
 
     useEffect(() => {
-        let boxes = new Array(numberOfDaysInMonth).fill(false);;
-        if (props.habitStates && props.habitStates[MMYY]) {
-            boxes = props.habitStates[MMYY];
-        }
-
-        let newRow = []
+        let newRow = [];
 
         newRow.push(
-            <span>{props.habitName}</span>
-        )
+            <span>{routine_name}</span>
+        );
 
-        for (let day = 0; day < numberOfDaysInMonth; day++) {
+        for (let day = 0; day < boxes.length; day++) {
             newRow.push(
                 <HabitBox
                     key={day}
                     id={day}
-                    // toggle={toggle} 
+                    toggle={toggle} 
                     checked={boxes[day]}
                 />)
-        }
+        };
 
-        newRow.push(<span id="currStreak">{getCurrStreak(props.date)}</span>)
-        newRow.push(<span id="maxStreak">{getMaxStreak(boxes)}</span>)
+        newRow.push(<span id="currStreak">{getCurrStreak(props.date)}</span>);
+        newRow.push(<span id="maxStreak">{getMaxStreak(boxes)}</span>);
 
         setHabitRow([newRow]);
-    }, [habit])
+    }
+    , [boxes])
 
 
     return (
-        <div style={calendarBoxStyle(numberOfDaysInMonth)}>
+        <div style={calendarBoxStyle(boxes.length)}>
             {habitRow}
         </div>
     )
