@@ -26,19 +26,17 @@ export default function Layout() {
       {currUser && <NavBar />}
       <Header />
 
-      {currUser !== undefined ?
-        (currUser === null ?
-          <>
-            <LandingPage/>
-          </>
+      {currUser === undefined ?
+        <CircularProgress/> 
         :
+        (currUser === null ?
+          <LandingPage/>
+          :
           <>
             <Calendar />
             <Notes />
           </>
-        )
-        : 
-        <CircularProgress/>
+        )        
       }
     </>
   );

@@ -38,7 +38,7 @@ export default function Habit(props) {
         let newRow = [];
 
         newRow.push(
-            <span>{routine_name}</span>
+            <span className="text-column">{routine_name}</span>
         );
 
         for (let day = 0; day < boxes.length; day++) {
@@ -51,8 +51,8 @@ export default function Habit(props) {
                 />)
         };
 
-        newRow.push(<span id="currStreak">{getCurrStreak(props.date)}</span>);
-        newRow.push(<span id="maxStreak">{getMaxStreak(boxes)}</span>);
+        newRow.push(<span className="text-column" id="currStreak">{getCurrStreak(props.date)}</span>);
+        newRow.push(<span className="text-column" id="maxStreak">{getMaxStreak(boxes)}</span>);
 
         setHabitRow([newRow]);
     }

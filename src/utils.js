@@ -10,12 +10,14 @@ export const daysMap = {
 
 export const calendarStyle = (calendarRows) => ({
     display: "grid",
-    gridTemplateRows: `repeat(${calendarRows.length}, 3em)`
+    gridTemplateRows: `repeat(${calendarRows}, 4em)`
 });
 
 export const calendarBoxStyle = (numberOfDaysInCurrMonth) => ({
     display: "grid",
-    gridTemplateColumns: `5em repeat(${numberOfDaysInCurrMonth}, 3em) 5em 5em`
+    margin: "1px",
+    gridColumnGap: "1px",
+    gridTemplateColumns: `5em repeat(${numberOfDaysInCurrMonth}, 4em) 5em 5em`
 
 })
 
