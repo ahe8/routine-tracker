@@ -1,11 +1,33 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Grid, Typography } from "@mui/material";
 import NoteCreate from "./NoteCreate";
 import NoteList from "./NoteList";
+import { getFormattedDate } from "../utils/constants";
+
+import { useAuth } from "../contexts/AuthContext";
 
 function Notes() {
   const [notes, setNotes] = useState([]);
+
+  const userInfo = useAuth().currentUser;
+
+  const date = getFormattedDate();
+
+  useEffect(() => {
+    if (userInfo) {
+      try {
+        fetch(`http://localhost:5001/${userInfo.uid}/notes`)
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("data is ", data);
+            setNotes(data);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, [userInfo]);
 
   const editNoteById = (id, newContents) => {
     const updateNotes = notes.map((note) => {
@@ -17,20 +39,42 @@ function Notes() {
     setNotes(updateNotes);
   };
 
-  const deleteNoteById = (id) => {
-    const updateNotes = notes.filter((note) => {
-      return note.id != id;
-    });
-    setNotes(updateNotes);
+  // still need to work on
+  const deleteNoteById = async (id) => {
+    await fetch(`http://localhost:5001/${userInfo.uid}/notes`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    })
+      .then(() => {
+        const updateNotes = notes.filter((note) => {
+          return note.id != id;
+        });
+        setNotes(updateNotes);
+      })
+      .catch((err) => console.log(err));
   };
 
-  const createNote = (contents) => {
-    const updateNotes = [
-      ...notes,
-      { id: Math.round(Math.random() * 9999), contents: contents },
-    ];
-    console.log(notes);
-    setNotes(updateNotes);
+  const createNote = async (contents) => {
+    if (contents.trim() !== "") {
+      const body = {
+        user_id: userInfo.uid,
+        contents: contents,
+        note_date: date,
+      };
+
+      await fetch(`http://localhost:5001/${userInfo.uid}/notes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      })
+        .then(() => {
+          const updateNotes = [...notes, { contents: contents }];
+          console.log(notes);
+          setNotes(updateNotes);
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //Components
 import { Box, Grid, Typography, Popover, Button } from "@mui/material";
@@ -12,6 +12,22 @@ function NoteCreate({ onCreate }) {
   const theme = useTheme();
   const [note, setNote] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  // const currentUser = useAuth().currentUser;
+
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     try {
+  //       fetch(`http://localhost:5001/${currentUser.uid}/notes`)
+  //         .then((response) => response.json())
+  //         .then((data) => {
+  //           setHabits(data);
+  //         });
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  // }, [currentUser]);
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -27,6 +43,12 @@ function NoteCreate({ onCreate }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // try {
+    //   if (note.trim() !== "") {
+
+    //   }
+    // }
     onCreate(note);
     setNote("");
     handlePopoverClose();

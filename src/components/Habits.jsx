@@ -16,9 +16,9 @@ export default function Habits({ date }) {
   useEffect(() => {
     if (currUser) {
       try {
-        fetch(`http://localhost:5000/${currUser.uid}/routines`)
-          .then(response => response.json())
-          .then(data => {
+        fetch(`http://localhost:5001/${currUser.uid}/routines`)
+          .then((response) => response.json())
+          .then((data) => {
             setHabits(data);
           });
       } catch (err) {
@@ -39,35 +39,38 @@ export default function Habits({ date }) {
     e.preventDefault();
 
     try {
-
       if (newHabitName.trim() !== "") {
         let MMYY = date.getMonth() + "" + date.getFullYear();
-        let boxes = JSON.stringify(new Array(getNumberOfDaysInMonth(date)).fill(false));
- 
+        let boxes = JSON.stringify(
+          new Array(getNumberOfDaysInMonth(date)).fill(false)
+        );
+
         const body = {
           user_id: currUser.uid,
           routine_name: newHabitName,
           routine_mmyy: MMYY,
-          routine_mmyy_values: boxes
+          routine_mmyy_values: boxes,
         };
-  
-        await fetch(`http://localhost:5000/${currUser.uid}/routines`, {
+
+        await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
+          body: JSON.stringify(body),
         })
-        .then(() => {
-          setHabits((prevHabits) => [...prevHabits, body]);
-          toggle();
-        })
-        .catch((err) => console.log(err));
+          .then(() => {
+            setHabits((prevHabits) => [...prevHabits, body]);
+            toggle();
+          })
+          .catch((err) => console.log(err));
       }
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   }
 
-  let habitElements = habits.map((habit, i) => <Habit key={i} {...habit} date={date} />);
+  let habitElements = habits.map((habit, i) => (
+    <Habit key={i} {...habit} date={date} />
+  ));
 
   return (
     <>
@@ -85,7 +88,11 @@ export default function Habits({ date }) {
         </form>
       )}
 
-      {addingHabit ? <button onClick={toggle}>Cancel</button> : <button onClick={toggle}>Add Habit</button>}
+      {addingHabit ? (
+        <button onClick={toggle}>Cancel</button>
+      ) : (
+        <button onClick={toggle}>Add Habit</button>
+      )}
     </>
   );
 }

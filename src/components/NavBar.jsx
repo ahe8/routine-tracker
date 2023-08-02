@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Grid, Typography, Popover } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-import { useAuth } from "../contexts/AuthContext"
+import { useAuth } from "../contexts/AuthContext";
 
 const NavBar = () => {
   const [userFirstName, setUserFirstName] = useState("");
@@ -19,16 +19,16 @@ const NavBar = () => {
   };
 
   useEffect(() => {
-    if (currUser){
+    if (currUser) {
       try {
-        fetch(`http://localhost:5000/${currUser.uid}`)
-          .then(res => res.json())
-          .then(data => setUserFirstName(data));
+        fetch(`http://localhost:5001/${currUser.uid}`)
+          .then((res) => res.json())
+          .then((data) => setUserFirstName(data));
       } catch (err) {
         console.log(err);
       }
     }
-  }, [currUser])
+  }, [currUser]);
 
   return (
     <Grid

@@ -1,8 +1,8 @@
-import './App.css'
+import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login"
-import Layout from "./components/Layout"
-import { AuthProvider } from "./contexts/AuthContext"
+import Login from "./pages/Login";
+import Layout from "./components/Layout";
+import { AuthProvider } from "./contexts/AuthContext";
 
 import { ThemeProvider, CssBaseline, GlobalStyles } from "@mui/material";
 import { defaultTheme } from "./utils/theme";

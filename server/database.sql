@@ -13,3 +13,10 @@ CREATE TABLE routine(
     routine_mmyy VARCHAR(6),
     routine_mmyy_values VARCHAR(255)
 );
+
+CREATE TABLE notes(
+    note_id SERIAL PRIMARY KEY,
+    user_id VARCHAR(128) REFERENCES users,
+    contents VARCHAR(255),
+    note_date VARCHAR(50)
+);
