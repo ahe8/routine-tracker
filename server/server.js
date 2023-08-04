@@ -34,12 +34,11 @@ app.get("/:uid", async (req, res) => {
 //create a routine
 app.post("/:uid/routines", async (req, res) => {
     try {
-        const { user_id, routine_name, routine_yyyymm, routine_yyyymm_values } = req.body;
+        const user_id = req.params.uid;
+        const { routine_name, routine_yyyymm, routine_values } = req.body;
         const newRoutine = await pool.query(
-            "WITH new_routine as (INSERT INTO user_routines (user_id, routine_name) values ($1, $2) returning user_routine_id) \
-                INSERT INTO routines (user_routine_id, user_id, routine_yyyymm, routine_yyyymm_values) \
-                    values ((select user_routine_id from new_routine), $1, $3, $4);",
-            [user_id, routine_name, routine_yyyymm, routine_yyyymm_values]
+            "INSERT INTO routines(user_id,routine_name,routine_yyyymm,routine_values,is_active) VALUES ($1,$2,$3,$4,true)",
+            [user_id, routine_name, routine_yyyymm, routine_values]
         );
         res.json(newRoutine.rows[0]);
     } catch (err) {
@@ -51,8 +50,9 @@ app.post("/:uid/routines", async (req, res) => {
 // get all routines
 app.get("/:uid/routines", async (req, res) => {
     try {
+        const user_id = req.params.uid;
         const allRoutines = await pool.query(
-            "SELECT * FROM routines WHERE user_id = $1 ORDER BY routine_id ASC", [req.params.uid]
+            "SELECT * FROM routines WHERE user_id = $1 ORDER BY routine_id ASC", [user_id]
         );
         res.json(allRoutines.rows);
     } catch (err) {
@@ -60,23 +60,26 @@ app.get("/:uid/routines", async (req, res) => {
     }
 })
 
-// get a routine
-app.get("/routines/:id", async (req, res) => {
+// get active routine names
+app.get("/:uid/routine/active", async (req, res) => {
     try {
-        const routineID = Number(req.params.id);
-        const routine = await pool.query("SELECT * FROM routines WHERE routine_id = $1", [routineID])
-        res.json(routine.rows[0]);
+        const user_id = req.params.uid;
+        const routines = await pool.query(
+            "SELECT routine_name FROM routines WHERE user_id = $1 AND is_active = true DISTINCT ORDER BY routine_id ASC", [user_id])
+        res.json(routines.rows);
     } catch (err) {
         console.error(err.message);
     }
 })
 
 // update routine
-app.put("/routines/:id", async (req, res) => {
+app.put("/:uid/routines", async (req, res) => {
     try {
-        const routineID = Number(req.params.id);
-        const { routine_yyyymm_values } = req.body;
-        const updateRoutine = await pool.query("UPDATE routines SET routine_yyyymm_values = $1 WHERE routine_id = $2", [routine_yyyymm_values, routineID])
+        const user_id = req.params.uid;
+        const { routine_values, routine_name } = req.body;
+        const updateRoutine = await pool.query(
+            "UPDATE routines SET routine_values = $1 WHERE user_id = $2 AND routine_name = $3"
+            , [routine_values, user_id, routine_name])
         res.json(updateRoutine);
     } catch (err) {
         console.error(err.message);
@@ -85,10 +88,14 @@ app.put("/routines/:id", async (req, res) => {
 
 
 // delete routine
-app.delete("/routines/:id", async (req, res) => {
+app.delete("/:uid/routines", async (req, res) => {
     try {
-        const routineID = Number(req.params.id);
-        const routine = await pool.query("DELETE * FROM routine WHERE routine_id = $1", [routineID]);
+        const user_id = req.params.uid;
+        const { routine_name, routine_yyyymm } = req.body;
+        const routine = await pool.query(
+            "DELETE * FROM routines WHERE user_id = $1 AND routine_name = $2 AND routine_yyyymm >= $3;\
+            UPDATE routines SET is_active = false WHERE user_id = $1 and routine_name = $2 and routine_yyyymm < $3;"
+            , [user_id, routine_name, routine_yyyymm]);
         res.json(routine);
     } catch (err) {
         console.error(err.message);

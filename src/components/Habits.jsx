@@ -47,7 +47,7 @@ export default function Habits() {
           user_id: currUser.uid,
           routine_name: newHabitName,
           routine_yyyymm: getYYYYMM(date),
-          routine_yyyymm_values: boxes
+          routine_values: boxes
         };
 
         await fetch(`http://localhost:5000/${currUser.uid}/routines`, {

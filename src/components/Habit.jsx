@@ -5,8 +5,8 @@ import { useDate } from "../contexts/DateContext"
 
 export default function Habit(props) {
     const [habitRow, setHabitRow] = useState([]);
-    const { routine_id, routine_name, routine_yyyymm, routine_yyyymm_values } = props;
-    const initialBoxState = JSON.parse(routine_yyyymm_values);
+    const { user_id, routine_name, routine_yyyymm, routine_values } = props;
+    const initialBoxState = JSON.parse(routine_values);
     const [boxes, setBoxes] = useState(initialBoxState);
     const { date } = useDate();
 
@@ -16,11 +16,11 @@ export default function Habit(props) {
             if (initialBoxState !== boxes) {
                 const body = {
                     ...props,
-                    routine_yyyymm_values: JSON.stringify(boxes)
+                    routine_values: JSON.stringify(boxes)
                 }
 
                 try {
-                    fetch(`http://localhost:5000/routines/${routine_id}`, {
+                    fetch(`http://localhost:5000/${user_id}/routines`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(body)
