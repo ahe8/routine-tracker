@@ -32,28 +32,21 @@ function NotesProvider({ children }) {
         contents: newContents,
       }
     );
-
     const updatedNotes = notes.map((note) => {
-      console.log("updated contents is ", response.data);
       if (note.id === id) {
         return { ...note, ...response.data };
       }
-
       return note;
     });
-    console.log("updatea notes are ", updatedNotes);
-
     setNotes(updatedNotes);
   };
 
   const deleteNoteById = async (id) => {
-    console.log();
     await axios.delete(`http://localhost:5001/${currUser.uid}/notes/${id}`);
 
     const updatedNotes = notes.filter((note) => {
       return note.id !== id;
     });
-
     setNotes(updatedNotes);
   };
 
@@ -74,12 +67,12 @@ function NotesProvider({ children }) {
       })
         .then(() => {
           const updateNotes = [...notes, { contents: contents }];
-          console.log(notes);
           setNotes(updateNotes);
         })
         .catch((err) => console.log(err));
     }
   };
+
   const valueToShare = {
     notes,
     deleteNoteById,

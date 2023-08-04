@@ -13,22 +13,6 @@ function NoteCreate({ onCreate }) {
   const [note, setNote] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  // const currentUser = useAuth().currentUser;
-
-  // useEffect(() => {
-  //   if (currentUser) {
-  //     try {
-  //       fetch(`http://localhost:5001/${currentUser.uid}/notes`)
-  //         .then((response) => response.json())
-  //         .then((data) => {
-  //           setHabits(data);
-  //         });
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-  // }, [currentUser]);
-
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -43,12 +27,6 @@ function NoteCreate({ onCreate }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // try {
-    //   if (note.trim() !== "") {
-
-    //   }
-    // }
     onCreate(note);
     setNote("");
     handlePopoverClose();
@@ -63,7 +41,7 @@ function NoteCreate({ onCreate }) {
       height={"100%"}
     >
       <Grid>
-        <Box Box display="flex">
+        <Box display="flex">
           <Button variant="outlined" onClick={handlePopoverOpen}>
             {" "}
             + New Note
@@ -81,41 +59,39 @@ function NoteCreate({ onCreate }) {
               open={Boolean(anchorEl)}
             >
               <Grid sx={{ backgroundColor: theme.secondary.darker }} p={1}>
-                <form noValidate>
-                  <Box
-                    component="form"
-                    sx={{
-                      "& .MuiTextField-root": { m: 3, width: "50ch" },
-                    }}
-                    noValidate
-                    autoComplete="off"
-                  >
-                    <Grid itme xs={12}>
-                      <Typography
-                        variant="p"
-                        component="p"
-                        fontSize={15}
-                        marginLeft={3}
-                        color={theme.primary.light}
-                      >
-                        Create New Note
-                      </Typography>
-                      <TextField
-                        id="outlined-multiline-static"
-                        multiline
-                        rows={4}
-                        placeholder="Write your thoughts"
-                        value={note}
-                        onChange={handleChange}
-                      />
-                    </Grid>
-                    <Grid marginLeft={3}>
-                      <Button variant="outlined" onClick={handleSubmit}>
-                        Save
-                      </Button>
-                    </Grid>
-                  </Box>
-                </form>
+                <Box
+                  component="form"
+                  sx={{
+                    "& .MuiTextField-root": { m: 3, width: "50ch" },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                >
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="p"
+                      component="p"
+                      fontSize={15}
+                      marginLeft={3}
+                      color={theme.primary.light}
+                    >
+                      Create New Note
+                    </Typography>
+                    <TextField
+                      id="outlined-multiline-static"
+                      multiline
+                      rows={4}
+                      placeholder="Write your thoughts"
+                      value={note}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  <Grid marginLeft={3}>
+                    <Button variant="outlined" onClick={handleSubmit}>
+                      Save
+                    </Button>
+                  </Grid>
+                </Box>
               </Grid>
             </Popover>
           )}

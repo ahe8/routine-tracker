@@ -11,8 +11,8 @@ import { NotesProvider } from "./contexts/NotesContext";
 function App() {
   return (
     <>
-      <ThemeProvider theme={defaultTheme}>
-        <CssBaseline>
+      <CssBaseline>
+        <ThemeProvider theme={defaultTheme}>
           <AuthProvider>
             <NotesProvider>
               <BrowserRouter>
@@ -23,8 +23,8 @@ function App() {
               </BrowserRouter>
             </NotesProvider>
           </AuthProvider>
-        </CssBaseline>
-      </ThemeProvider>
+        </ThemeProvider>
+      </CssBaseline>
     </>
   );
 }

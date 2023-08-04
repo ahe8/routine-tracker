@@ -18,7 +18,6 @@ export const CommonPopover = ({ childeren, onClose }) => {
 
   <Popover
     id="edit-note"
-    // anchorEl={anchorEl}
     onClose={onClose}
     anchorOrigin={{
       vertical: "top",
@@ -39,7 +38,6 @@ export const CommonPopover = ({ childeren, onClose }) => {
       xs={12}
       sx={{ backgroundColor: theme.secondary.darker }}
     >
-      {/* <NoteEdit onSubmit={handleSubmit} note={note} /> */}
       <h4>heyyy</h4>
       Hello sunshine
       {childeren}

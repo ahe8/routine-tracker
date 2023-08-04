@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 
-//Imported compoents
+//Components
 import { Grid } from "@mui/material";
 import NoteCreate from "./NoteCreate";
 import NoteList from "./NoteList";

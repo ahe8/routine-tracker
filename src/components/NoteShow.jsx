@@ -25,7 +25,6 @@ function NoteShow({ note, onDelete, onEdit }) {
 
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElForDelete, setAnchorElForDelete] = React.useState(null);
 
@@ -71,7 +70,7 @@ function NoteShow({ note, onDelete, onEdit }) {
 
   return (
     <Grid display="flex" justifyContent="center" alignItems="center">
-      <Box sx={{ width: 1000, border: 1, p: 1, m: 1 }}>
+      <Box sx={{ width: 1000, border: 1, p: 3, m: 1 }}>
         <Grid container spacing={2}>
           <Grid
             item
@@ -134,6 +133,7 @@ function NoteShow({ note, onDelete, onEdit }) {
                 >
                   <Box
                     component="form"
+                    item
                     sx={{
                       width: 500,
                       height: 200,
@@ -141,7 +141,7 @@ function NoteShow({ note, onDelete, onEdit }) {
                     noValidate
                     autoComplete="off"
                   >
-                    <Grid itme xs={12}>
+                    <Grid item xs={12}>
                       <Typography
                         variant="p"
                         component="p"

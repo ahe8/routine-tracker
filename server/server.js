@@ -121,20 +121,6 @@ app.post("/:uid/notes", async (req, res) => {
   }
 });
 
-// //create a note
-// app.post("/notes", async (req, res) => {
-//   try {
-//     const { user_id, contents, note_date } = req.body;
-//     const newNote = await pool.query(
-//       "INSERT INTO notes (user_id, contents, note_date) VALUES($1, $2, $3) RETURNING *",
-//       [user_id, contents, note_date]
-//     );
-//     res.json(newNote.rows[0]);
-//   } catch (err) {
-//     console.error(err.message);
-//   }
-// });
-
 // get all notes
 app.get("/:uid/notes", async (req, res) => {
   try {
@@ -181,12 +167,10 @@ app.put("/:uid/notes/:id", async (req, res) => {
 app.delete("/:uid/notes/:id", async (req, res) => {
   try {
     const noteId = Number(req.params.id);
-    console.log("note id is", noteId);
     const note = await pool.query("DELETE FROM notes WHERE id = $1", [noteId]);
-
     res.json(note);
   } catch (err) {
-    console.error("error message is ", err.message);
+    console.error(err.message);
   }
 });
 
