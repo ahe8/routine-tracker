@@ -6,7 +6,7 @@ export const get = async (url, headers = {}) => {
       headers: {
         ...headers,
       },
-      withCredentials: true,
+      // withCredentials: true,
     });
 
     return { ...data };

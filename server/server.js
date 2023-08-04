@@ -121,11 +121,25 @@ app.post("/:uid/notes", async (req, res) => {
   }
 });
 
+// //create a note
+// app.post("/notes", async (req, res) => {
+//   try {
+//     const { user_id, contents, note_date } = req.body;
+//     const newNote = await pool.query(
+//       "INSERT INTO notes (user_id, contents, note_date) VALUES($1, $2, $3) RETURNING *",
+//       [user_id, contents, note_date]
+//     );
+//     res.json(newNote.rows[0]);
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// });
+
 // get all notes
 app.get("/:uid/notes", async (req, res) => {
   try {
     const allNotes = await pool.query(
-      "SELECT * FROM notes WHERE user_id = $1 ORDER BY note_id ASC",
+      "SELECT * FROM notes WHERE user_id = $1 ORDER BY id ASC",
       [req.params.uid]
     );
 
@@ -136,10 +150,10 @@ app.get("/:uid/notes", async (req, res) => {
 });
 
 // get a note
-app.get("/notes/:id", async (req, res) => {
+app.get("/:uid/notes/:id", async (req, res) => {
   try {
     const noteId = Number(req.params.id);
-    const note = await pool.query("SELECT * FROM notes WHERE note_id = $1", [
+    const note = await pool.query("SELECT * FROM notes WHERE id = $1", [
       noteId,
     ]);
     res.json(note.rows[0]);
@@ -154,7 +168,7 @@ app.put("/notes/:id", async (req, res) => {
     const noteId = Number(req.params.id);
     const { contents } = req.body;
     const updateNote = await pool.query(
-      "UPDATE notes SET contents = $1 WHERE note_id = $2",
+      "UPDATE notes SET contents = $1 WHERE id = $2",
       [contents, noteId]
     );
     res.json(updateNote);
@@ -164,16 +178,15 @@ app.put("/notes/:id", async (req, res) => {
 });
 
 // delete note
-app.delete("/notes/:id", async (req, res) => {
+app.delete("/:uid/notes/:id", async (req, res) => {
   try {
     const noteId = Number(req.params.id);
-    const note = await pool.query("DELETE * FROM notes WHERE note_id = $1", [
-      noteId,
-    ]);
+    console.log("note id is", noteId);
+    const note = await pool.query("DELETE FROM notes WHERE id = $1", [noteId]);
 
     res.json(note);
   } catch (err) {
-    console.error(err.message);
+    console.error("error message is ", err.message);
   }
 });
 

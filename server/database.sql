@@ -15,7 +15,7 @@ CREATE TABLE routine(
 );
 
 CREATE TABLE notes(
-    note_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     user_id VARCHAR(128) REFERENCES users,
     contents VARCHAR(255),
     note_date VARCHAR(50)

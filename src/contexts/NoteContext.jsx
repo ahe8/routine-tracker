@@ -1,20 +1,28 @@
+import React from "react";
 import { createContext, useState, useCallback } from "react";
 import axios from "axios";
+import { useAuth } from "./AuthContext";
 
 const NotesContext = createContext();
 
-function Provider({ children }) {
+function NotesProvider({ children }) {
   const [notes, setNotes] = useState([]);
 
+  const currUser = useAuth().currentUser;
+
   const fetchNotes = useCallback(async () => {
-    const response = await axios.get("http://localhost:5001/notes");
+    console.log("current user id is", currUser.uid);
+    const response = await axios.get(
+      `http://localhost:5001/${currUser.uid}/notes`
+    );
+    console.log(response);
 
     setNotes(response.data);
   }, []);
 
-  const editNoteById = async (id, newTitle) => {
+  const editNoteById = async (id, newContents) => {
     const response = await axios.put(`http://localhost:5001/notes/${id}`, {
-      title: newTitle,
+      contents: newContents,
     });
 
     const updatedNotes = notes.map((note) => {
@@ -29,7 +37,7 @@ function Provider({ children }) {
   };
 
   const deleteNoteById = async (id) => {
-    await axios.delete(`http://localhost:5001/notes/${id}`);
+    await axios.delete(`http://localhost:5001/${userInfo.uid}/notes/${id}`);
     const updatedNotes = notes.filter((note) => {
       return note.id !== id;
     });
@@ -62,5 +70,5 @@ function Provider({ children }) {
   );
 }
 
-export { Provider };
+export { NotesProvider };
 export default NotesContext;
