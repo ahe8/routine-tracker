@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
-import { daysMap, calendarBoxStyle, getNumberOfDaysInMonth } from '../utils'
+import { daysMap, calendarBoxStyle, getNumberOfDaysInMonth, getYYYYMM } from '../utils';
+import { Button } from "@mui/material";
+import { useDate } from "../contexts/DateContext";
 
-export default function CalendarHeader({ date }) {
+export default function CalendarHeader() {
     const [calendarHeaders, setCalendarHeaders] = useState([]);
+
+    const { date, prevMonth, nextMonth, changeToPrevMonth, changeToNextMonth } = useDate();
 
     const numberOfDaysInMonth = getNumberOfDaysInMonth(date);
 
@@ -10,37 +14,41 @@ export default function CalendarHeader({ date }) {
     const month = date.getMonth();
 
     useEffect(() => {
+        let daysOfWeek = [];
         let daysInMonth = [];
-        let daysOfWeek = []
 
         for (let day = 1; day <= numberOfDaysInMonth; day++) {
             let currDate = new Date(year, month, day).getDay();
-            daysOfWeek.push(<span className="calendarBox" id={day + 1}>{daysMap[currDate]}</span>)
-
-            daysInMonth.push(<span className="calendarBox" id={day}>{day}</span>)
+            daysOfWeek.push(<small key={day} className="calendarBox">{daysMap[currDate]}</small>)
+            daysInMonth.push(<p key={day} className="calendarBox">{day}</p>)
         }
 
-        let daysOfWeekInit =
+        let daysOfWeekRow =
             <div key="0" style={calendarBoxStyle(numberOfDaysInMonth)}>
-                <h3>Day</h3>
+                <span></span>
                 {daysOfWeek}
+            </div>
+
+        let daysInMonthRow =
+            <div key="1" id="headers" style={calendarBoxStyle(numberOfDaysInMonth)}>
+                <h4>Habit</h4>
+                {daysInMonth}
                 <h4>Current Streak</h4>
                 <h4>Max Streak</h4>
             </div>
-
-        let calendarInit =
-            <div key="1" style={calendarBoxStyle(numberOfDaysInMonth)}>
-                <h3>Habit</h3>
-                {daysInMonth}
-            </div>
-
-        setCalendarHeaders([daysOfWeekInit, calendarInit]);
-    }, [])
+        setCalendarHeaders([daysOfWeekRow, daysInMonthRow]);
+    }, [date])
 
     return (
         <>
             <h1>Calendar</h1>
-            <h3>{date.toLocaleString('default', { month: 'long' })} {year}</h3>
+
+            <div className="month">
+                <Button variant="outlined" size="small" disabled={prevMonth} onClick={changeToPrevMonth}>{"<<"}</Button>
+                <h3>{date.toLocaleString('default', { month: 'long' })} {year}</h3>
+                <Button variant="outlined" size="small" disabled={nextMonth} onClick={changeToNextMonth}>{">>"}</Button>
+            </div>
+            
             {calendarHeaders}
         </>
     )

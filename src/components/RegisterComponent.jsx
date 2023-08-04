@@ -11,9 +11,9 @@ export const RegisterComponent = (props) => {
     const { signup } = useAuth();
     const navigate = useNavigate();
 
-    async function handleSubmit(e){
+    async function handleSubmit(e) {
         e.preventDefault();
-        
+
         if (pass !== passConfirmation) {
             setErrorMsg("Passwords must be the same!");
         } else {
@@ -26,7 +26,7 @@ export const RegisterComponent = (props) => {
                     first_name: name
                 }
 
-                await fetch("http://localhost:5000/register", {
+                await fetch(`http://localhost:5000/register`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body)
@@ -37,7 +37,6 @@ export const RegisterComponent = (props) => {
                 setErrorMsg(err);
             }
         }
-        
     }
 
     return (
@@ -45,17 +44,17 @@ export const RegisterComponent = (props) => {
             <h2>Register</h2>
             <form className="register-form" onSubmit={handleSubmit} action="/">
                 <label htmlFor="name">Full name</label>
-                <input value={name} onChange={(e) => setName(e.target.value)} type="name" placeholder="Full name" id="name" name= "name"></input>
+                <input value={name} onChange={(e) => setName(e.target.value)} type="name" placeholder="Full name" id="name" name="name"></input>
                 <label htmlFor="email">Email</label>
-                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email@email.com" id="email" name="email"/>
+                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email@email.com" id="email" name="email" />
                 <label htmlFor="password">Password</label>
-                <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="**********" id="password" name="password"/>
+                <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="**********" id="password" name="password" />
                 <label htmlFor="passConfirmation">Confirm Password</label>
-                <input value={passConfirmation} onChange={(e) => setPassConfirmation(e.target.value)} type="password" placeholder="**********" id="passConfirmation" name="passConfirmation"/>
+                <input value={passConfirmation} onChange={(e) => setPassConfirmation(e.target.value)} type="password" placeholder="**********" id="passConfirmation" name="passConfirmation" />
                 <button type="submit">Register</button>
             </form>
-            <h3 style={{color: 'red'}}>{errorMsg}</h3>
-            <button className="link-btn" onClick={()=>props.onFormSwitch("login")}>Already have an account? Login here</button>
+            <h3 style={{ color: 'red' }}>{errorMsg}</h3>
+            <button className="link-btn" onClick={() => props.onFormSwitch("login")}>Already have an account? Login here</button>
         </div>
     )
 }

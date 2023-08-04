@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { getNumberOfDaysInMonth, calendarBoxStyle } from "../utils"
 import HabitBox from "./HabitBox";
+import { useDate } from "../contexts/DateContext"
 
 export default function Habit(props) {
-
     const [habitRow, setHabitRow] = useState([]);
-    const { routine_id, routine_name, routine_mmyy, routine_mmyy_values } = props;
-    const initialBoxState = JSON.parse(routine_mmyy_values);
+    const { routine_id, routine_name, routine_yyyymm, routine_yyyymm_values } = props;
+    const initialBoxState = JSON.parse(routine_yyyymm_values);
     const [boxes, setBoxes] = useState(initialBoxState);
+    const { date } = useDate();
 
     // debounce
     useEffect(() => {
@@ -15,7 +16,7 @@ export default function Habit(props) {
             if (initialBoxState !== boxes) {
                 const body = {
                     ...props,
-                    routine_mmyy_values: JSON.stringify(boxes)
+                    routine_yyyymm_values: JSON.stringify(boxes)
                 }
 
                 try {
@@ -24,7 +25,6 @@ export default function Habit(props) {
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(body)
                     });
-
                 } catch (err) {
                     console.log(err);
                 }
@@ -37,9 +37,7 @@ export default function Habit(props) {
     useEffect(() => {
         let newRow = [];
 
-        newRow.push(
-            <span className="text-column">{routine_name}</span>
-        );
+        newRow.push(<span className="text-column">{routine_name}</span>);
 
         for (let day = 0; day < boxes.length; day++) {
             newRow.push(
@@ -48,15 +46,15 @@ export default function Habit(props) {
                     id={day}
                     toggle={toggle}
                     checked={boxes[day]}
-                />)
+                />
+            )
         };
 
-        newRow.push(<span className="text-column" id="currStreak">{getCurrStreak(props.date)}</span>);
+        newRow.push(<span className="text-column" id="currStreak">{getCurrStreak(date)}</span>);
         newRow.push(<span className="text-column" id="maxStreak">{getMaxStreak(boxes)}</span>);
 
         setHabitRow([newRow]);
-    }
-        , [boxes])
+    }, [boxes])
 
     function toggle(id) {
         setBoxes(prevBoxes => {
@@ -68,15 +66,17 @@ export default function Habit(props) {
     }
 
     function getCurrStreak(boxArray) {
-        let streak = 0;
+        // let streak = 0;
 
-        // offset 1 because boxArray is 0-indexed
-        let day = props.date.getDate() - 1;
+        // // offset 1 because boxArray is 0-indexed
+        // let day = props.date.getDate() - 1;
 
-        while (day >= 0 && boxArray[day--]) {
-            streak++;
-        }
-        return streak;
+        // while (day >= 0 && boxArray[day--]) {
+        //     streak++;
+        // }
+        // return streak;
+
+        return 0;
     }
 
     function getMaxStreak(boxArray) {
@@ -94,8 +94,6 @@ export default function Habit(props) {
 
         return maxStreak;
     }
-
-
 
     return (
         <div style={calendarBoxStyle(boxes.length)}>

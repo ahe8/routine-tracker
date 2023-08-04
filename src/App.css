@@ -14,3 +14,19 @@
 .text-column {
   margin: auto;
 }
+
+.month {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  align-items: center;
+  margin: 1em;
+}
+
+#headers h4 {
+  margin-bottom: auto;
+}
+
+.newHabitButton {
+  margin-top: 0.5em;
+}

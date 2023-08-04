@@ -1,11 +1,11 @@
 export const daysMap = {
-    0:"S",
-    1:"M",
-    2:"T",
-    3:"W",
-    4:"T",
-    5:"F",
-    6:"S"
+    0: "Sun",
+    1: "Mon",
+    2: "Tue",
+    3: "Wed",
+    4: "Thu",
+    5: "Fri",
+    6: "Sat"
 };
 
 export const calendarStyle = (calendarRows) => ({
@@ -17,7 +17,7 @@ export const calendarBoxStyle = (numberOfDaysInCurrMonth) => ({
     display: "grid",
     margin: "1px",
     gridColumnGap: "1px",
-    gridTemplateColumns: `5em repeat(${numberOfDaysInCurrMonth}, 4em) 5em 5em`
+    gridTemplateColumns: `8em repeat(${numberOfDaysInCurrMonth}, 4em) 5em 5em`
 
 })
 
@@ -26,3 +26,16 @@ export const getNumberOfDaysInMonth = (date) => {
     const month = date.getMonth();
     return new Date(year, month + 1, 0).getDate();
 };
+
+export const getYYYYMM = (date) => {
+    let res = date.getFullYear();
+
+    const month = Number(date.getMonth());
+    if (month < 10) {
+        res = res + "0" + date.getMonth();
+    } else {
+        res = res + "" + date.getMonth();
+    }
+
+    return Number(res);
+}
