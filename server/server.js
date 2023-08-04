@@ -163,7 +163,7 @@ app.get("/:uid/notes/:id", async (req, res) => {
 });
 
 // update note
-app.put("/notes/:id", async (req, res) => {
+app.put("/:uid/notes/:id", async (req, res) => {
   try {
     const noteId = Number(req.params.id);
     const { contents } = req.body;
