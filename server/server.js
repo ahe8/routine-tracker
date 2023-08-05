@@ -86,20 +86,36 @@ app.put("/:uid/routines", async (req, res) => {
     }
 })
 
+// // delete routine
+// app.delete("/:uid/routines", async (req, res) => {
+//     try {
+//         const user_id = req.params.uid;
+//         const { routine_name, routine_yyyymm } = req.body;
+//         const routine = await pool.query(
+//             "DELETE * FROM routines WHERE user_id = $1 AND routine_name = $2 AND routine_yyyymm >= $3;\
+//             UPDATE routines SET is_active = false WHERE user_id = $1 and routine_name = $2 and routine_yyyymm < $3;"
+//             , [user_id, routine_name, routine_yyyymm]);
+//         res.json(routine);
+//     } catch (err) {
+//         console.error(err.message);
+//     }
+// })
+
 // delete routine
 app.delete("/:uid/routines", async (req, res) => {
     try {
-        const user_id = req.params.uid;
-        const { routine_name, routine_yyyymm } = req.body;
-        const routine = await pool.query(
-            "DELETE * FROM routines WHERE user_id = $1 AND routine_name = $2 AND routine_yyyymm >= $3;\
-            UPDATE routines SET is_active = false WHERE user_id = $1 and routine_name = $2 and routine_yyyymm < $3;"
-            , [user_id, routine_name, routine_yyyymm]);
-        res.json(routine);
+      const user_id = req.params.uid;
+      const { routine_id } = req.body; // Expect routine_id from the request body
+  
+      const routine = await pool.query(
+        "DELETE FROM routines WHERE user_id = $1 AND routine_id = $2;"
+        , [user_id, routine_id]);
+      
+      res.json(routine);
     } catch (err) {
-        console.error(err.message);
+      console.error(err.message);
     }
-})
+  })
 
 //get earliest month
 app.get("/:uid/earliest_month", async (req, res) => {

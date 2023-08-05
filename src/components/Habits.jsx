@@ -71,11 +71,34 @@ export default function Habits() {
     }
   }
 
+  async function handleDelete(routineId) {
+    try {
+      await fetch(`http://localhost:5000/${currUser.uid}/routines`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          routine_id: routineId
+        })
+      });
+
+      // Remove the deleted habit from the state
+      setHabits(prevHabits => prevHabits.filter(habit => habit.routine_id !== routineId));
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+
 
   let habitElements =
     habits
       .filter(habit => habit['routine_yyyymm'] === getYYYYMM(date))
-      .map((habit) => <Habit key={habit['routine_id']} {...habit} date={date} />);
+      .map(habit => (
+        <div key={habit['routine_id']}>
+          <Habit {...habit} date={date} />
+          <button onClick={() => handleDelete(habit['routine_id'])}>Delete</button>
+        </div>
+      ));
 
   return (
     <>
