@@ -1,17 +1,18 @@
 CREATE DATABASE routine_database;
 
-CREATE TABLE users(
+CREATE TABLE users (
     user_id VARCHAR(128) PRIMARY KEY,
     email VARCHAR(255) UNIQUE,
     first_name VARCHAR(50)
 );
 
-CREATE TABLE routine(
+CREATE TABLE routines (
     routine_id SERIAL PRIMARY KEY,
     user_id VARCHAR(128) REFERENCES users,
     routine_name VARCHAR(255),
-    routine_mmyy VARCHAR(6),
-    routine_mmyy_values VARCHAR(255)
+    routine_yyyymm integer,
+    routine_values VARCHAR(255),
+    is_active BOOLEAN
 );
 
 CREATE TABLE notes(

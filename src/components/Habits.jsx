@@ -1,26 +1,29 @@
 import { useState, useEffect } from "react";
-import {
-  calendarStyle,
-  calendarBoxStyle,
-  getNumberOfDaysInMonth,
-} from "../utils";
+import { calendarStyle, getNumberOfDaysInMonth, getYYYYMM } from "../utils";
 import Habit from "./Habit";
 import { useAuth } from "../contexts/AuthContext";
+import { useDate } from "../contexts/DateContext";
 
-export default function Habits({ date }) {
+export default function Habits() {
   const [habits, setHabits] = useState([]);
   const [addingHabit, setAddingHabit] = useState(false);
   const [newHabitName, setNewHabitName] = useState("");
   const currUser = useAuth().currentUser;
+  const { setEarliestMonth, date } = useDate();
 
   useEffect(() => {
     if (currUser) {
       try {
+        // fetch all habits
         fetch(`http://localhost:5001/${currUser.uid}/routines`)
-          .then((response) => response.json())
+          .then((res) => res.json())
           .then((data) => {
             setHabits(data);
           });
+
+        fetch(`http://localhost:5001/${currUser.uid}/earliest_month`)
+          .then((res) => res.json())
+          .then((data) => setEarliestMonth(data));
       } catch (err) {
         console.log(err);
       }
@@ -40,7 +43,6 @@ export default function Habits({ date }) {
 
     try {
       if (newHabitName.trim() !== "") {
-        let MMYY = date.getMonth() + "" + date.getFullYear();
         let boxes = JSON.stringify(
           new Array(getNumberOfDaysInMonth(date)).fill(false)
         );
@@ -48,29 +50,27 @@ export default function Habits({ date }) {
         const body = {
           user_id: currUser.uid,
           routine_name: newHabitName,
-          routine_mmyy: MMYY,
-          routine_mmyy_values: boxes,
+          routine_yyyymm: getYYYYMM(date),
+          routine_values: boxes,
         };
 
         await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
-        })
-          .then(() => {
-            setHabits((prevHabits) => [...prevHabits, body]);
-            toggle();
-          })
-          .catch((err) => console.log(err));
+        }).then(() => {
+          setHabits((prevHabits) => [...prevHabits, body]);
+          toggle();
+        });
       }
     } catch (err) {
       console.log(err);
     }
   }
 
-  let habitElements = habits.map((habit, i) => (
-    <Habit key={i} {...habit} date={date} />
-  ));
+  let habitElements = habits
+    .filter((habit) => habit["routine_yyyymm"] === getYYYYMM(date))
+    .map((habit) => <Habit key={habit["routine_id"]} {...habit} date={date} />);
 
   return (
     <>
@@ -89,9 +89,15 @@ export default function Habits({ date }) {
       )}
 
       {addingHabit ? (
-        <button onClick={toggle}>Cancel</button>
+        <button className="newHabitButton" onClick={toggle}>
+          Cancel
+        </button>
       ) : (
-        <button onClick={toggle}>Add Habit</button>
+        getYYYYMM(new Date()) === getYYYYMM(date) && (
+          <button className="newHabitButton" onClick={toggle}>
+            Add Habit
+          </button>
+        )
       )}
     </>
   );

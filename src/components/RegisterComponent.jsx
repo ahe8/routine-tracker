@@ -26,7 +26,7 @@ export const RegisterComponent = (props) => {
           first_name: name,
         };
 
-        await fetch("http://localhost:5001/register", {
+        await fetch(`http://localhost:5001/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),

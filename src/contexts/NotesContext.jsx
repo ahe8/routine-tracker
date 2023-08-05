@@ -17,11 +17,15 @@ function NotesProvider({ children }) {
   const currUser = useAuth().currentUser;
 
   const fetchNotes = useCallback(async () => {
-    if (currUser) {
-      const response = await axios.get(
-        `http://localhost:5001/${currUser.uid}/notes`
-      );
-      setNotes(response.data);
+    try {
+      if (currUser) {
+        const response = await axios.get(
+          `http://localhost:5001/${currUser.uid}/notes`
+        );
+        setNotes(response.data);
+      }
+    } catch (err) {
+      console.log(err);
     }
   }, [currUser]);
 
