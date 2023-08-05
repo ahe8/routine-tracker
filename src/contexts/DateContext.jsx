@@ -11,22 +11,23 @@ export function DateProvider({ children }) {
     const [date, setDate] = useState(new Date);
     const [prevMonth, setPrevMonth] = useState(false);
     const [nextMonth, setNextMonth] = useState(false);
+    const [earliestMonth, setEarliestMonth] = useState(getYYYYMM(new Date)); 
 
     useEffect(() => {
-        if (getYYYYMM(new Date()) === getYYYYMM(date)) {
+        const currentMonth = getYYYYMM(date);
+
+        if (getYYYYMM(new Date()) === currentMonth) {
             setNextMonth(true);
         } else {
             setNextMonth(false);
         }
-    }, [date]);
 
-    // function getPrevMonth() {
-
-    // }
-
-    // function getNextMonth() {
-
-    // }
+        if (earliestMonth === currentMonth) {
+            setPrevMonth(true);
+        } else {
+            setPrevMonth(false);
+        }
+    }, [date, earliestMonth]);
 
     function changeToPrevMonth() {
         const month = date.getMonth();
@@ -62,7 +63,8 @@ export function DateProvider({ children }) {
         changeToPrevMonth,
         changeToNextMonth,
         prevMonth,
-        nextMonth
+        nextMonth,
+        setEarliestMonth
     };
 
     return (

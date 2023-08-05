@@ -13,7 +13,7 @@ export default function Habits() {
   const [addingHabit, setAddingHabit] = useState(false);
   const [newHabitName, setNewHabitName] = useState("");
   const currUser = useAuth().currentUser;
-  const { date } = useDate();
+  const { setEarliestMonth, date } = useDate();
 
   useEffect(() => {
     if (currUser) {
@@ -21,7 +21,13 @@ export default function Habits() {
         // fetch all habits
         fetch(`http://localhost:5000/${currUser.uid}/routines`)
           .then(res => res.json())
-          .then(data => setHabits(data));
+          .then(data => { 
+            setHabits(data)
+          });
+
+        fetch(`http://localhost:5000/${currUser.uid}/earliest_month`)
+        .then(res => res.json())
+        .then(data => setEarliestMonth(data));
       } catch (err) {
         console.log(err);
       }

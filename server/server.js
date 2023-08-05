@@ -86,7 +86,6 @@ app.put("/:uid/routines", async (req, res) => {
     }
 })
 
-
 // delete routine
 app.delete("/:uid/routines", async (req, res) => {
     try {
@@ -97,6 +96,20 @@ app.delete("/:uid/routines", async (req, res) => {
             UPDATE routines SET is_active = false WHERE user_id = $1 and routine_name = $2 and routine_yyyymm < $3;"
             , [user_id, routine_name, routine_yyyymm]);
         res.json(routine);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
+//get earliest month
+app.get("/:uid/earliest_month", async (req, res) => {
+    try {
+        const user_id = req.params.uid;
+        const earliestMonth = await pool.query(
+            "SELECT MIN(routine_yyyymm) FROM routines WHERE user_id = $1"
+            , [user_id]);
+
+        res.json(earliestMonth.rows[0].min);
     } catch (err) {
         console.error(err.message);
     }
