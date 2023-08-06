@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext"
 import { authErrors } from "../utils";
+import GoogleSignIn from "./GoogleSignIn";
 
 export const LoginComponent = (props) => {
     const [email, setEmail] = useState("");
@@ -31,6 +32,7 @@ export const LoginComponent = (props) => {
                 <button type="submit">Log In</button>
             </form>
             <h3 className="errorMsg">{errorMsg}</h3>
+            <GoogleSignIn />
             <button className="link-btn" onClick={()=>props.onFormSwitch("register")}> Register here</button>
         </div>
     )

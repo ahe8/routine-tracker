@@ -7,12 +7,27 @@ const pool = require("./db");
 app.use(cors());
 app.use(express.json());
 
-//create user
-app.post("/register", async (req, res) => {
+// //create user
+// app.post("/register", async (req, res) => {
+//   try {
+//     const { email, user_id, first_name } = req.body;
+//     const newUser = await pool.query(
+//       "INSERT into users(email, user_id, first_name) VALUES($1, $2, $3) RETURNING user_id",
+//       [email, user_id, first_name]
+//     );
+//     res.json(newUser);
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// });
+
+
+//upsert user
+app.put("/register", async (req, res) => {
   try {
     const { email, user_id, first_name } = req.body;
     const newUser = await pool.query(
-      "INSERT into users(email, user_id, first_name) VALUES($1, $2, $3) RETURNING user_id",
+      "INSERT into users(email, user_id, first_name) VALUES($1, $2, $3) ON CONFLICT DO NOTHING",
       [email, user_id, first_name]
     );
     res.json(newUser);

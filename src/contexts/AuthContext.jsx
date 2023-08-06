@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth } from '../firebase'
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getNumberOfDaysInMonth } from '../utils';
 
 const AuthContext = createContext();
+const provider = new GoogleAuthProvider();
 
 export function useAuth() {
     return useContext(AuthContext);
@@ -19,6 +21,25 @@ export function AuthProvider({ children }) {
         return signInWithEmailAndPassword(auth, email, password);
     }
     
+    async function googleSignIn() {
+        const result = await signInWithPopup(auth, provider)
+
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+
+        // The signed-in user info.
+        const user = result.user;
+
+        const firstName = user.displayName.split(" ")[0];
+
+        const userInfo = {
+            user_id: user.uid,
+            first_name: firstName,
+            email: user.email,
+        }
+
+        return userInfo;
+    }
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -33,6 +54,7 @@ export function AuthProvider({ children }) {
         currentUser,
         signup,
         signin,
+        googleSignIn
     };
     
     return (

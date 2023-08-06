@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { authErrors } from "../utils";
+import GoogleSignIn from "./GoogleSignIn";
 
 export const RegisterComponent = (props) => {
   const [email, setEmail] = useState("");
@@ -43,7 +44,7 @@ export const RegisterComponent = (props) => {
   return (
     <div className="auth-form-container">
       <h2>Register</h2>
-      <form className="register-form" onSubmit={handleSubmit} action="/">
+      <form className="register-form" onSubmit={handleSubmit}>
         <label htmlFor="name">First name</label>
         <input
           value={name}
@@ -87,6 +88,7 @@ export const RegisterComponent = (props) => {
         <button type="submit">Register</button>
       </form>
       <h3 className="errorMsg">{errorMsg}</h3>
+      <GoogleSignIn />
       <button className="link-btn" onClick={() => props.onFormSwitch("login")}>
         Already have an account? Login here
       </button>
