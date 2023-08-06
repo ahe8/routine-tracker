@@ -11,7 +11,7 @@ export function DateProvider({ children }) {
     const [date, setDate] = useState(new Date);
     const [prevMonth, setPrevMonth] = useState(false);
     const [nextMonth, setNextMonth] = useState(false);
-    const [earliestMonth, setEarliestMonth] = useState(getYYYYMM(new Date)); 
+    const [earliestMonth, setEarliestMonth] = useState(); 
 
     useEffect(() => {
         const currentMonth = getYYYYMM(date);
@@ -22,7 +22,7 @@ export function DateProvider({ children }) {
             setNextMonth(false);
         }
 
-        if (earliestMonth === currentMonth) {
+        if (!earliestMonth || earliestMonth === currentMonth) {
             setPrevMonth(true);
         } else {
             setPrevMonth(false);
