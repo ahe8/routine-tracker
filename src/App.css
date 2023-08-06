@@ -30,3 +30,7 @@
 .newHabitButton {
   margin-top: 0.5em;
 }
+
+.errorMsg {
+  color: red;
+}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { authErrors } from "../utils";
 
 export const RegisterComponent = (props) => {
   const [email, setEmail] = useState("");
@@ -34,7 +35,7 @@ export const RegisterComponent = (props) => {
 
         navigate("/");
       } catch (err) {
-        setErrorMsg(err);
+        setErrorMsg(authErrors[err.code]);
       }
     }
   }
@@ -43,14 +44,15 @@ export const RegisterComponent = (props) => {
     <div className="auth-form-container">
       <h2>Register</h2>
       <form className="register-form" onSubmit={handleSubmit} action="/">
-        <label htmlFor="name">Full name</label>
+        <label htmlFor="name">First name</label>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
           type="name"
-          placeholder="Full name"
+          placeholder="First name"
           id="name"
           name="name"
+          required
         ></input>
         <label htmlFor="email">Email</label>
         <input
@@ -60,6 +62,7 @@ export const RegisterComponent = (props) => {
           placeholder="Email@email.com"
           id="email"
           name="email"
+          required
         />
         <label htmlFor="password">Password</label>
         <input
@@ -69,6 +72,7 @@ export const RegisterComponent = (props) => {
           placeholder="**********"
           id="password"
           name="password"
+          required
         />
         <label htmlFor="passConfirmation">Confirm Password</label>
         <input
@@ -78,10 +82,11 @@ export const RegisterComponent = (props) => {
           placeholder="**********"
           id="passConfirmation"
           name="passConfirmation"
+          required
         />
         <button type="submit">Register</button>
       </form>
-      <h3 style={{ color: "red" }}>{errorMsg}</h3>
+      <h3 className="errorMsg">{errorMsg}</h3>
       <button className="link-btn" onClick={() => props.onFormSwitch("login")}>
         Already have an account? Login here
       </button>
