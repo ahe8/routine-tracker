@@ -22,7 +22,7 @@ function App() {
                     <Route path="/" element={<Layout />} />
                     <Route path="/login" element={<Login />} />
                   </Routes>
-                </BrowserRouter>{" "}
+                </BrowserRouter>
               </DateProvider>
             </NotesProvider>
           </AuthProvider>
