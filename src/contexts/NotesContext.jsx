@@ -20,7 +20,7 @@ function NotesProvider({ children }) {
     try {
       if (currUser) {
         const response = await axios.get(
-          `http://localhost:5001/${currUser.uid}/notes`
+          `http://localhost:5000/${currUser.uid}/notes`
         );
         setNotes(response.data);
       }
@@ -31,7 +31,7 @@ function NotesProvider({ children }) {
 
   const editNoteById = async (id, newContents) => {
     const response = await axios.put(
-      `http://localhost:5001/${currUser.uid}/notes/${id}`,
+      `http://localhost:5000/${currUser.uid}/notes/${id}`,
       {
         contents: newContents,
       }
@@ -46,7 +46,7 @@ function NotesProvider({ children }) {
   };
 
   const deleteNoteById = async (id) => {
-    await axios.delete(`http://localhost:5001/${currUser.uid}/notes/${id}`);
+    await axios.delete(`http://localhost:5000/${currUser.uid}/notes/${id}`);
 
     const updatedNotes = notes.filter((note) => {
       return note.id !== id;
@@ -64,7 +64,7 @@ function NotesProvider({ children }) {
         note_date: date,
       };
 
-      await fetch(`http://localhost:5001/${currUser.uid}/notes`, {
+      await fetch(`http://localhost:5000/${currUser.uid}/notes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

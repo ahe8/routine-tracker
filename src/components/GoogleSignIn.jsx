@@ -10,7 +10,7 @@ export default function GoogleSignIn() {
         try{
             const userInfo = await googleSignIn(); 
 
-            await fetch(`http://localhost:5001/register`, {
+            await fetch(`http://localhost:5000/register`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userInfo),
