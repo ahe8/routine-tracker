@@ -1,8 +1,8 @@
-export default function HabitBox({id, checked, toggle}) {
+export default function HabitBox({id, checked, toggle, disabled}) {
     return (
         <span 
-            className={checked ? "on" : "off"} 
-            onClick={() => toggle(id)}>
+            className={disabled ? "disabled" : (checked ? "on" : "off")} 
+            onClick={() => disabled ? null : toggle(id)}>
         </span>
     )
 }

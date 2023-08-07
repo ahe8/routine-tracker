@@ -68,9 +68,10 @@ export default function Habits() {
     }
   }
 
+  
   let habitElements = habits
     .filter((habit) => habit["routine_yyyymm"] === getYYYYMM(date))
-    .map((habit) => <Habit key={habit["routine_id"]} {...habit} date={date} />);
+    .map((habit) => <Habit key={habit["routine_id"]} {...habit} />);
 
   return (
     <>
