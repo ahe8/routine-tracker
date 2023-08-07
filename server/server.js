@@ -21,6 +21,21 @@ app.post("/register", async (req, res) => {
   }
 });
 
+
+//upsert user
+app.put("/register", async (req, res) => {
+  try {
+    const { email, user_id, first_name } = req.body;
+    const newUser = await pool.query(
+      "INSERT into users(email, user_id, first_name) VALUES($1, $2, $3) ON CONFLICT DO NOTHING",
+      [email, user_id, first_name]
+    );
+    res.json(newUser);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 // get user's first name
 app.get("/:uid", async (req, res) => {
   try {
@@ -125,5 +140,73 @@ app.get("/:uid/earliest_month", async (req, res) => {
     console.error(err.message);
   }
 });
+
+//create a note
+app.post("/:uid/notes", async (req, res) => {
+  try {
+    const { user_id, contents, note_date } = req.body;
+    const newNote = await pool.query(
+      "INSERT INTO notes (user_id, contents, note_date) VALUES($1, $2, $3) RETURNING *",
+      [user_id, contents, note_date]
+    );
+    res.json(newNote.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// get all notes
+app.get("/:uid/notes", async (req, res) => {
+  try {
+    const allNotes = await pool.query(
+      "SELECT * FROM notes WHERE user_id = $1 ORDER BY id ASC",
+      [req.params.uid]
+    );
+
+    res.json(allNotes.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// get a note
+app.get("/:uid/notes/:id", async (req, res) => {
+  try {
+    const noteId = Number(req.params.id);
+    const note = await pool.query("SELECT * FROM notes WHERE id = $1", [
+      noteId,
+    ]);
+    res.json(note.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// update note
+app.put("/:uid/notes/:id", async (req, res) => {
+  try {
+    const noteId = Number(req.params.id);
+    const { contents } = req.body;
+    const updateNote = await pool.query(
+      "UPDATE notes SET contents = $1 WHERE id = $2",
+      [contents, noteId]
+    );
+    res.json(updateNote);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// delete note
+app.delete("/:uid/notes/:id", async (req, res) => {
+  try {
+    const noteId = Number(req.params.id);
+    const note = await pool.query("DELETE FROM notes WHERE id = $1", [noteId]);
+    res.json(note);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 
 app.listen(5000, console.log("listening on port 5000..."));

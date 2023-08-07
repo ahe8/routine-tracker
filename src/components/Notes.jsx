@@ -1,37 +1,22 @@
 import React from "react";
-import { useState } from "react";
-import { Grid, Typography } from "@mui/material";
+import { useEffect } from "react";
+
+//Components
+import { Grid } from "@mui/material";
 import NoteCreate from "./NoteCreate";
 import NoteList from "./NoteList";
 
+//Context
+import useNotesContext from "../hooks/use-note-context";
+
 function Notes() {
-  const [notes, setNotes] = useState([]);
+  const { notes, deleteNoteById, fetchNotes, createNote, editNoteById } =
+    useNotesContext();
 
-  const editNoteById = (id, newContents) => {
-    const updateNotes = notes.map((note) => {
-      if (note.id === id) {
-        return { ...note, contents: newContents };
-      }
-      return note;
-    });
-    setNotes(updateNotes);
-  };
-
-  const deleteNoteById = (id) => {
-    const updateNotes = notes.filter((note) => {
-      return note.id != id;
-    });
-    setNotes(updateNotes);
-  };
-
-  const createNote = (contents) => {
-    const updateNotes = [
-      ...notes,
-      { id: Math.round(Math.random() * 9999), contents: contents },
-    ];
-    console.log(notes);
-    setNotes(updateNotes);
-  };
+  //Fecth Notes
+  useEffect(() => {
+    fetchNotes();
+  }, [fetchNotes, editNoteById]);
 
   return (
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>

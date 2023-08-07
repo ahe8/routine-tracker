@@ -14,3 +14,10 @@ CREATE TABLE routines (
     routine_values VARCHAR(255),
     is_active BOOLEAN
 );
+
+CREATE TABLE notes(
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(128) REFERENCES users,
+    contents VARCHAR(255),
+    note_date VARCHAR(50)
+);

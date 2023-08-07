@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { calendarStyle, getNumberOfDaysInMonth, getYYYYMM } from "../utils";
+import { calendarStyle, getNumberOfDaysInMonth, getYYYYMM } from "../utils";
 import Habit from "./Habit";
 import { useAuth } from "../contexts/AuthContext";
 import { useDate } from "../contexts/DateContext";
@@ -56,7 +57,7 @@ export default function Habits() {
           routine_values: boxes,
         };
 
-        await fetch(`http://localhost:5000/${currUser.uid}/routines`, {
+        await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
