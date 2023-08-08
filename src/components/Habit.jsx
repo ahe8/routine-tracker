@@ -20,7 +20,7 @@ export default function Habit(props) {
         };
 
         try {
-          fetch(`http://localhost:5000/${user_id}/routines`, {
+          fetch(`http://localhost:5001/${user_id}/routines`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),

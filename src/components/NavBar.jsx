@@ -21,7 +21,7 @@ const NavBar = () => {
   useEffect(() => {
     if (currUser) {
       try {
-        fetch(`http://localhost:5000/${currUser.uid}`)
+        fetch(`http://localhost:5001/${currUser.uid}`)
           .then((res) => res.json())
           .then((data) => setUserFirstName(data));
       } catch (err) {

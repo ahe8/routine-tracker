@@ -17,13 +17,13 @@ export default function Habits() {
     if (currUser) {
       try {
         // fetch all habits
-        fetch(`http://localhost:5000/${currUser.uid}/routines`)
+        fetch(`http://localhost:5001/${currUser.uid}/routines`)
           .then((res) => res.json())
           .then((data) => {
             setHabits(data);
           });
 
-        fetch(`http://localhost:5000/${currUser.uid}/earliest_month`)
+        fetch(`http://localhost:5001/${currUser.uid}/earliest_month`)
           .then((res) => res.json())
           .then((data) => setEarliestMonth(data));
       } catch (err) {
@@ -56,7 +56,7 @@ export default function Habits() {
           routine_values: boxes,
         };
 
-        await fetch(`http://localhost:5000/${currUser.uid}/routines`, {
+        await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
@@ -72,7 +72,7 @@ export default function Habits() {
 
   async function handleDelete(routineId) {
     try {
-      await fetch(`http://localhost:5000/${currUser.uid}/routines`, {
+      await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -92,7 +92,7 @@ export default function Habits() {
   async function handleEditSave(routineId) {
     try {
       // Send update request to server
-      await fetch(`http://localhost:5000/${currUser.uid}/routines`, {
+      await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -21,7 +21,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-
 //upsert user
 app.put("/register", async (req, res) => {
   try {
@@ -208,5 +207,4 @@ app.delete("/:uid/notes/:id", async (req, res) => {
   }
 });
 
-
-app.listen(5000, console.log("listening on port 5000..."));
+app.listen(5001, console.log("listening on port 5001..."));
