@@ -10,6 +10,8 @@ export default function Habits() {
   const [newHabitName, setNewHabitName] = useState("");
   const currUser = useAuth().currentUser;
   const { setEarliestMonth, date } = useDate();
+  const [editingHabitId, setEditingHabitId] = useState(null);
+  const [editedHabitName, setEditedHabitName] = useState("");
 
   useEffect(() => {
     if (currUser) {
@@ -68,10 +70,89 @@ export default function Habits() {
     }
   }
 
+<<<<<<< HEAD
   
   let habitElements = habits
     .filter((habit) => habit["routine_yyyymm"] === getYYYYMM(date))
     .map((habit) => <Habit key={habit["routine_id"]} {...habit} />);
+=======
+  async function handleDelete(routineId) {
+    try {
+      await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          routine_id: routineId,
+        }),
+      });
+
+      // Remove the deleted habit from the state
+      setHabits((prevHabits) =>
+        prevHabits.filter((habit) => habit.routine_id !== routineId)
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function handleEditSave(routineId) {
+    try {
+      // Send update request to server
+      await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          routine_id: routineId,
+          routine_name: editedHabitName,
+        }),
+      });
+
+      // Update the habit's name in the state
+      setHabits((prevHabits) =>
+        prevHabits.map((habit) =>
+          habit.routine_id === routineId
+            ? { ...habit, routine_name: editedHabitName }
+            : habit
+        )
+      );
+
+      // Reset editing state
+      setEditingHabitId(null);
+      setEditedHabitName("");
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  let habitElements = habits
+    .filter((habit) => habit["routine_yyyymm"] === getYYYYMM(date))
+    .map((habit) => (
+      <div key={habit["routine_id"]}>
+        {editingHabitId === habit["routine_id"] ? (
+          <>
+            <input
+              type="text"
+              value={editedHabitName}
+              onChange={(e) => setEditedHabitName(e.target.value)}
+            />
+            <button onClick={() => handleEditSave(habit["routine_id"])}>
+              Save
+            </button>
+          </>
+        ) : (
+          <>
+            <Habit {...habit} date={date} />
+            <button onClick={() => setEditingHabitId(habit["routine_id"])}>
+              Edit
+            </button>
+            <button onClick={() => handleDelete(habit["routine_id"])}>
+              Delete
+            </button>
+          </>
+        )}
+      </div>
+    ));
+>>>>>>> main
 
   return (
     <>

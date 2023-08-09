@@ -1,3 +1,5 @@
+const port = process.env.REACT_APP_PORT || 5001; // Default to 5001 if not provided
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -20,7 +22,6 @@ app.post("/register", async (req, res) => {
     console.error(err.message);
   }
 });
-
 
 //upsert user
 app.put("/register", async (req, res) => {
@@ -96,11 +97,13 @@ app.get("/:uid/routine/active", async (req, res) => {
 app.put("/:uid/routines", async (req, res) => {
   try {
     const user_id = req.params.uid;
-    const { routine_values, routine_name } = req.body;
+    const { routine_id, routine_name } = req.body; // Expect routine_id and routine_name from the request body
+
     const updateRoutine = await pool.query(
-      "UPDATE routines SET routine_values = $1 WHERE user_id = $2 AND routine_name = $3",
-      [routine_values, user_id, routine_name]
+      "UPDATE routines SET routine_name = $1 WHERE user_id = $2 AND routine_id = $3",
+      [routine_name, user_id, routine_id]
     );
+
     res.json(updateRoutine);
   } catch (err) {
     console.error(err.message);
@@ -111,12 +114,13 @@ app.put("/:uid/routines", async (req, res) => {
 app.delete("/:uid/routines", async (req, res) => {
   try {
     const user_id = req.params.uid;
-    const { routine_name, routine_yyyymm } = req.body;
+    const { routine_id } = req.body; // Expect routine_id from the request body
+
     const routine = await pool.query(
-      "DELETE * FROM routines WHERE user_id = $1 AND routine_name = $2 AND routine_yyyymm >= $3;\
-            UPDATE routines SET is_active = false WHERE user_id = $1 and routine_name = $2 and routine_yyyymm < $3;",
-      [user_id, routine_name, routine_yyyymm]
+      "DELETE FROM routines WHERE user_id = $1 AND routine_id = $2;",
+      [user_id, routine_id]
     );
+
     res.json(routine);
   } catch (err) {
     console.error(err.message);
@@ -205,4 +209,6 @@ app.delete("/:uid/notes/:id", async (req, res) => {
   }
 });
 
-app.listen(5001, console.log("listening on port 5001..."));
+app.listen(port, () => {
+    console.log(`Listening on port ${port}...`);
+  });

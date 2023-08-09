@@ -43,6 +43,7 @@ function NotesProvider({ children }) {
       return note;
     });
     setNotes(updatedNotes);
+    fetchNotes();
   };
 
   const deleteNoteById = async (id) => {
