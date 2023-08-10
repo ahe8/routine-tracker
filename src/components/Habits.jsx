@@ -99,7 +99,7 @@ export default function Habits() {
   async function handleEditSave(routineId) {
     try {
       // Send update request to server
-      await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
+      await fetch(`http://localhost:5001/${currUser.uid}/routines/name`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -142,7 +142,7 @@ export default function Habits() {
           </>
         ) : (
           <>
-            <Habit {...habit} date={date} />
+            <Habit {...habit} />
             <button onClick={() => setEditingHabitId(habit["routine_id"])}>
               Edit
             </button>

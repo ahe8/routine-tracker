@@ -4,7 +4,7 @@ import HabitBox from "./HabitBox";
 
 export default function Habit(props) {
   const [habitRow, setHabitRow] = useState([]);
-  const { user_id, routine_name, routine_yyyymm, routine_values } = props;
+  const { user_id, routine_name, routine_yyyymm, routine_values, goal } = props;
   const initialBoxState = JSON.parse(routine_values);
   const [boxes, setBoxes] = useState(initialBoxState);
   
@@ -18,11 +18,12 @@ export default function Habit(props) {
         };
 
         try {
-          fetch(`http://localhost:5001/${user_id}/routines`, {
+          fetch(`http://localhost:5001/${user_id}/routines/values`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
           });
+          console.log(body);
         } catch (err) {
           console.log(err);
         }
@@ -59,7 +60,7 @@ export default function Habit(props) {
     );
     newRow.push(
       <span key="goalHeaderColumn" className="text-column" id="goalHeaderColumn">
-        {props.goal}
+        {goal}
       </span>
     );
 

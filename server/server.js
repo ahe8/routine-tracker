@@ -94,8 +94,8 @@ app.get("/:uid/routine/active", async (req, res) => {
   }
 });
 
-// update routine
-app.put("/:uid/routines", async (req, res) => {
+// update routine name
+app.put("/:uid/routines/name", async (req, res) => {
   try {
     const user_id = req.params.uid;
     const { routine_id, routine_name } = req.body; // Expect routine_id and routine_name from the request body
@@ -110,6 +110,22 @@ app.put("/:uid/routines", async (req, res) => {
     console.error(err.message);
   }
 });
+
+// update routine
+app.put("/:uid/routines/values", async (req, res) => {
+  try {
+    const user_id = req.params.uid;
+    const { routine_values, routine_name } = req.body;
+    const updateRoutine = await pool.query(
+      "UPDATE routines SET routine_values = $1 WHERE user_id = $2 AND routine_name = $3",
+      [routine_values, user_id, routine_name]
+    );
+    res.json(updateRoutine);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 
 // delete routine
 app.delete("/:uid/routines", async (req, res) => {
