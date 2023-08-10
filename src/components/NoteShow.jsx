@@ -30,7 +30,7 @@ function NoteShow({ note, onDelete, onEdit }) {
 
   const handlePopoverClose = () => {
     setAnchorEl(null);
-    setAnchorElForDelete(null);
+    // setAnchorElForDelete(null);
   };
 
   const handleDeleteClick = () => {
@@ -45,12 +45,7 @@ function NoteShow({ note, onDelete, onEdit }) {
 
   const handlePopoverDeleteClose = () => {
     setAnchorElForDelete(null);
-  };
-
-  const handleShowIcons = () => {
-    setShowIcons(!showIcons);
-
-    console.log("mouse hover");
+    // setAnchorEl(null);
   };
 
   const content = (
@@ -136,7 +131,6 @@ function NoteShow({ note, onDelete, onEdit }) {
                   >
                     <Box
                       component="form"
-                      item
                       sx={{
                         width: 500,
                         height: 200,
