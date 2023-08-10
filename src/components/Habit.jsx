@@ -5,25 +5,25 @@ import HabitBox from "./HabitBox";
 export default function Habit(props) {
   const [habitRow, setHabitRow] = useState([]);
   const { user_id, routine_name, routine_yyyymm, routine_values, goal } = props;
-  const initialBoxState = JSON.parse(routine_values);
-  const [boxes, setBoxes] = useState(initialBoxState);
+  const [tempBoxState, setTempBoxState] = useState(JSON.parse(routine_values));
+  const [boxes, setBoxes] = useState(JSON.parse(routine_values));
   
   // debounce
   useEffect(() => {
     const timeoutID = setTimeout(() => {
-      if (initialBoxState !== boxes) {
+      if (JSON.stringify(tempBoxState) !== JSON.stringify(boxes)) {
         const body = {
           ...props,
           routine_values: JSON.stringify(boxes),
         };
-
         try {
           fetch(`http://localhost:5001/${user_id}/routines/values`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
-          });
-          console.log(body);
+          }).then(() => {
+            setTempBoxState(boxes);
+          })
         } catch (err) {
           console.log(err);
         }

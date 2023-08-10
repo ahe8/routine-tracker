@@ -111,7 +111,7 @@ app.put("/:uid/routines/name", async (req, res) => {
   }
 });
 
-// update routine
+// update routine values
 app.put("/:uid/routines/values", async (req, res) => {
   try {
     const user_id = req.params.uid;
