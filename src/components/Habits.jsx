@@ -8,6 +8,7 @@ export default function Habits() {
   const [habits, setHabits] = useState([]);
   const [addingHabit, setAddingHabit] = useState(false);
   const [newHabitName, setNewHabitName] = useState("");
+  const [newHabitGoal, setNewHabitGoal] = useState(1);
   const currUser = useAuth().currentUser;
   const { setEarliestMonth, date } = useDate();
   const [editingHabitId, setEditingHabitId] = useState(null);
@@ -36,8 +37,12 @@ export default function Habits() {
     setAddingHabit((prevState) => !prevState);
   }
 
-  function handleChange(e) {
+  function handleNameChange(e) {
     setNewHabitName(e.target.value);
+  }
+
+  function handleGoalChange(e) {
+    setNewHabitGoal(e.target.value);
   }
 
   async function handleSubmit(e) {
@@ -54,6 +59,7 @@ export default function Habits() {
           routine_name: newHabitName,
           routine_yyyymm: getYYYYMM(date),
           routine_values: boxes,
+          goal: newHabitGoal
         };
 
         await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
@@ -70,7 +76,6 @@ export default function Habits() {
     }
   }
 
-  
   async function handleDelete(routineId) {
     try {
       await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
@@ -90,6 +95,7 @@ export default function Habits() {
     }
   }
 
+  
   async function handleEditSave(routineId) {
     try {
       // Send update request to server
@@ -158,8 +164,12 @@ export default function Habits() {
       </div>
 
       {addingHabit && (
-        <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="New habit" onChange={handleChange} />
+        <form className="addHabitForm" onSubmit={handleSubmit}>
+          <label>Habit name</label>
+          <input type="text" placeholder="New habit" onChange={handleNameChange} required/>
+          <label>Monthly goal</label>
+          <input type="number" placeholder="# of days goal" min="1" max={getNumberOfDaysInMonth(date)} onChange={handleGoalChange} required/>
+          {/* <button>Daily</button><button>Weekly</button><button>4x a Week</button> */}
           <input type="submit" value="Add" />
         </form>
       )}

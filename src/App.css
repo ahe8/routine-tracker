@@ -42,3 +42,10 @@
 .disabled {
   background-color: grey;
 }
+
+.addHabitForm * {
+  display:block;
+  margin:auto;
+  margin-top:0.5em;
+  text-align: center;
+}

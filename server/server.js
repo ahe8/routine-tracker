@@ -54,10 +54,11 @@ app.get("/:uid", async (req, res) => {
 app.post("/:uid/routines", async (req, res) => {
   try {
     const user_id = req.params.uid;
-    const { routine_name, routine_yyyymm, routine_values } = req.body;
+    const { routine_name, routine_yyyymm, routine_values, goal } = req.body;
+    console.log(req.body);
     const newRoutine = await pool.query(
-      "INSERT INTO routines(user_id,routine_name,routine_yyyymm,routine_values,is_active) VALUES ($1,$2,$3,$4,true)",
-      [user_id, routine_name, routine_yyyymm, routine_values]
+      "INSERT INTO routines(user_id,routine_name,routine_yyyymm,routine_values,is_active,goal) VALUES ($1,$2,$3,$4,true,$5)",
+      [user_id, routine_name, routine_yyyymm, routine_values, goal]
     );
     res.json(newRoutine.rows[0]);
   } catch (err) {
