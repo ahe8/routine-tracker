@@ -70,12 +70,6 @@ export default function Habits() {
     }
   }
 
-<<<<<<< HEAD
-  
-  let habitElements = habits
-    .filter((habit) => habit["routine_yyyymm"] === getYYYYMM(date))
-    .map((habit) => <Habit key={habit["routine_id"]} {...habit} />);
-=======
   async function handleDelete(routineId) {
     try {
       await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
@@ -95,6 +89,7 @@ export default function Habits() {
     }
   }
 
+  
   async function handleEditSave(routineId) {
     try {
       // Send update request to server
@@ -152,7 +147,6 @@ export default function Habits() {
         )}
       </div>
     ));
->>>>>>> main
 
   return (
     <>
