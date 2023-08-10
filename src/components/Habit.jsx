@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
-import { getNumberOfDaysInMonth, calendarBoxStyle } from "../utils";
+import { getYYYYMM, calendarBoxStyle } from "../utils";
 import HabitBox from "./HabitBox";
-import { useDate } from "../contexts/DateContext";
 
 export default function Habit(props) {
   const [habitRow, setHabitRow] = useState([]);
   const { user_id, routine_name, routine_yyyymm, routine_values } = props;
   const initialBoxState = JSON.parse(routine_values);
   const [boxes, setBoxes] = useState(initialBoxState);
-  const { date } = useDate();
-
+  
   // debounce
   useEffect(() => {
     const timeoutID = setTimeout(() => {
@@ -37,21 +35,30 @@ export default function Habit(props) {
   useEffect(() => {
     let newRow = [];
 
-    newRow.push(<span className="text-column">{routine_name}</span>);
+    newRow.push(<span key="routine_name" className="text-column">{routine_name}</span>);
+
+    const today = new Date();
+    const currentMonth = getYYYYMM(today);
 
     for (let day = 0; day < boxes.length; day++) {
-      newRow.push(
-        <HabitBox key={day} id={day} toggle={toggle} checked={boxes[day]} />
-      );
+      if (routine_yyyymm === currentMonth && day > today.getDate() - 1){
+        newRow.push(
+          <HabitBox key={day} id={day} toggle={toggle} checked={boxes[day]} disabled={true}/>
+        );
+      } else {
+        newRow.push(
+          <HabitBox key={day} id={day} toggle={toggle} checked={boxes[day]} disabled={false}/>
+        );
+      }
     }
 
     newRow.push(
-      <span className="text-column" id="currStreak">
-        {getCurrStreak(date)}
+      <span key="currStreak" className="text-column" id="currStreak">
+        {getCurrStreak(boxes)}
       </span>
     );
     newRow.push(
-      <span className="text-column" id="maxStreak">
+      <span key="maxStreak" className="text-column" id="maxStreak">
         {getMaxStreak(boxes)}
       </span>
     );
@@ -69,17 +76,15 @@ export default function Habit(props) {
   }
 
   function getCurrStreak(boxArray) {
-    // let streak = 0;
+    let streak = 0;
+    let day = new Date().getDate();
 
-    // // offset 1 because boxArray is 0-indexed
-    // let day = props.date.getDate() - 1;
+    console.log(day);
 
-    // while (day >= 0 && boxArray[day--]) {
-    //     streak++;
-    // }
-    // return streak;
-
-    return 0;
+    while (day >= 0 && boxArray[day--]) {
+        streak++;
+    }
+    return streak;
   }
 
   function getMaxStreak(boxArray) {

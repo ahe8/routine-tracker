@@ -38,3 +38,7 @@
 .link-btn {
   margin-top: 0.5em;
 }
+
+.disabled {
+  background-color: grey;
+}
