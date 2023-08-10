@@ -33,8 +33,8 @@ export default function CalendarHeader() {
             <div key="1" id="headers" style={calendarBoxStyle(numberOfDaysInMonth)}>
                 <h4>Habit</h4>
                 {daysInMonth}
-                <h4>Current Streak</h4>
-                <h4>Max Streak</h4>
+                <h4>Achieved</h4>
+                <h4>Monthly Goal</h4>
             </div>
         setCalendarHeaders([daysOfWeekRow, daysInMonthRow]);
     }, [date])

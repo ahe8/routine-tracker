@@ -53,13 +53,13 @@ export default function Habit(props) {
     }
 
     newRow.push(
-      <span key="currStreak" className="text-column" id="currStreak">
-        {getCurrStreak(boxes)}
+      <span key="achievedHeaderColumn" className="text-column" id="achievedHeaderColumn">
+        {boxes.filter(Boolean).length}
       </span>
     );
     newRow.push(
-      <span key="maxStreak" className="text-column" id="maxStreak">
-        {getMaxStreak(boxes)}
+      <span key="goalHeaderColumn" className="text-column" id="goalHeaderColumn">
+        {props.goal}
       </span>
     );
 
@@ -75,33 +75,10 @@ export default function Habit(props) {
     });
   }
 
-  function getCurrStreak(boxArray) {
-    let streak = 0;
-    let day = new Date().getDate();
-
-    console.log(day);
-
-    while (day >= 0 && boxArray[day--]) {
-        streak++;
-    }
-    return streak;
+  function achievedGoal() {
+    return boxArray.filter(Boolean).length;
   }
 
-  function getMaxStreak(boxArray) {
-    let maxStreak = 0;
-    let currStreak = 0;
-
-    boxArray.forEach((box) => {
-      if (box) {
-        currStreak++;
-        maxStreak = currStreak > maxStreak ? currStreak : maxStreak;
-      } else {
-        currStreak = 0;
-      }
-    });
-
-    return maxStreak;
-  }
 
   return <div style={calendarBoxStyle(boxes.length)}>{habitRow}</div>;
 }
