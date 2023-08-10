@@ -25,6 +25,7 @@ function NoteShow({ note, onDelete, onEdit }) {
 
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [showIcons, setShowIcons] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElForDelete, setAnchorElForDelete] = React.useState(null);
 
@@ -46,6 +47,12 @@ function NoteShow({ note, onDelete, onEdit }) {
     setAnchorElForDelete(null);
   };
 
+  const handleShowIcons = () => {
+    setShowIcons(!showIcons);
+
+    console.log("mouse hover");
+  };
+
   const handleDeleteClick = () => {
     onDelete(note.id);
   };
@@ -55,9 +62,6 @@ function NoteShow({ note, onDelete, onEdit }) {
     onEdit(id, newContents);
     handlePopoverClose();
   };
-
-  //get date
-  const todayDate = getFormattedDate();
 
   // get contents on the note
   let content = (
@@ -70,7 +74,10 @@ function NoteShow({ note, onDelete, onEdit }) {
 
   return (
     <Grid display="flex" justifyContent="center" alignItems="center">
-      <Box sx={{ width: 1000, border: 1, p: 3, m: 1 }}>
+      <Box
+        sx={{ width: 1000, border: 1, p: 3, m: 1 }}
+        onMouseOver={handleShowIcons}
+      >
         <Grid container spacing={2}>
           <Grid
             item
@@ -87,10 +94,12 @@ function NoteShow({ note, onDelete, onEdit }) {
               fontSize={15}
               marginRight={1}
             >
-              {todayDate}
+              {note.note_date}
             </Typography>
           </Grid>
+          {/* {showIcons && ( */}
           <Grid
+            clasName="icons"
             item
             xs={4}
             container
@@ -106,8 +115,6 @@ function NoteShow({ note, onDelete, onEdit }) {
               <DeleteIcon />
             </IconButton>
             {anchorElForDelete && (
-              // <CommonPopover anchorEl={anchorElForDelete} onClose={handlePopoverDeleteClose}></CommonPopover>
-
               <Popover
                 id="delete-note"
                 anchorEl={anchorElForDelete}
@@ -214,6 +221,7 @@ function NoteShow({ note, onDelete, onEdit }) {
               </Popover>
             )}
           </Grid>
+          {/* )} */}
 
           <Grid
             container

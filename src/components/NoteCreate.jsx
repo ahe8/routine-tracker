@@ -29,6 +29,7 @@ function NoteCreate({ onCreate }) {
     event.preventDefault();
     onCreate(note);
     setNote("");
+
     handlePopoverClose();
   };
 
