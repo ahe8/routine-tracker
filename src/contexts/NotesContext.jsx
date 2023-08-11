@@ -72,8 +72,8 @@ function NotesProvider({ children }) {
       })
         .then(() => {
           const updateNotes = [...notes, { contents: contents }];
-          setNotes(updateNotes);
           fetchNotes();
+          setNotes(updateNotes);
         })
         .catch((err) => console.log(err));
     }
