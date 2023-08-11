@@ -17,7 +17,7 @@ export const calendarBoxStyle = (numberOfDaysInCurrMonth) => ({
     display: "grid",
     margin: "1px",
     gridColumnGap: "1px",
-    gridTemplateColumns: `8em repeat(${numberOfDaysInCurrMonth}, 4em) 5em 5em`
+    gridTemplateColumns: `2em 8em repeat(${numberOfDaysInCurrMonth}, 4em) 5em 5em`
 
 })
 

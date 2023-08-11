@@ -13,6 +13,7 @@ export default function Habits() {
   const { setEarliestMonth, date } = useDate();
   const [editingHabitId, setEditingHabitId] = useState(null);
   const [editedHabitName, setEditedHabitName] = useState("");
+  const [editingHabit, setEditingHabit] = useState(false);
 
   useEffect(() => {
     if (currUser) {
@@ -33,8 +34,12 @@ export default function Habits() {
     }
   }, [currUser]);
 
-  function toggle() {
-    setAddingHabit((prevState) => !prevState);
+  function toggleAddingHabit() {
+    setAddingHabit(prevState => !prevState);
+  }
+
+  function toggleEditingHabit() {
+    setEditingHabit(prevState => !prevState);
   }
 
   function handleNameChange(e) {
@@ -68,7 +73,7 @@ export default function Habits() {
           body: JSON.stringify(body),
         }).then(() => {
           setHabits((prevHabits) => [...prevHabits, body]);
-          toggle();
+          toggleAddingHabit();
         });
       }
     } catch (err) {
@@ -142,7 +147,7 @@ export default function Habits() {
           </>
         ) : (
           <>
-            <Habit {...habit} />
+            <Habit key={habit["routine_id"]} {...habit} editing={editingHabit} handleDelete={handleDelete}/>
             <button onClick={() => setEditingHabitId(habit["routine_id"])}>
               Edit
             </button>
@@ -174,13 +179,28 @@ export default function Habits() {
         </form>
       )}
 
+      {editingHabit ? (
+        <div>
+          <button className="editHabitButton" onClick={toggleEditingHabit}>
+            Discard Changes
+          </button>
+          <button>
+            Save Changes
+          </button>
+        </div>
+      ) : (
+        <button onClick={toggleEditingHabit}>
+          Edit
+        </button>
+      )}
+
       {addingHabit ? (
-        <button className="newHabitButton" onClick={toggle}>
+        <button className="newHabitButton" onClick={toggleAddingHabit}>
           Cancel
         </button>
       ) : (
         getYYYYMM(new Date()) === getYYYYMM(date) && (
-          <button className="newHabitButton" onClick={toggle}>
+          <button className="newHabitButton" onClick={toggleAddingHabit}>
             Add Habit
           </button>
         )

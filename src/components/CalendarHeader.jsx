@@ -26,11 +26,13 @@ export default function CalendarHeader() {
         let daysOfWeekRow =
             <div key="0" style={calendarBoxStyle(numberOfDaysInMonth)}>
                 <span></span>
+                <span></span>
                 {daysOfWeek}
             </div>
 
         let daysInMonthRow =
             <div key="1" id="headers" style={calendarBoxStyle(numberOfDaysInMonth)}>
+                <span></span>
                 <h4>Habit</h4>
                 {daysInMonth}
                 <h4>Achieved</h4>

@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
-import { getYYYYMM, calendarBoxStyle } from "../utils";
+import { getYYYYMM, calendarBoxStyle, getNumberOfDaysInMonth } from "../utils";
 import HabitBox from "./HabitBox";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useDate } from "../contexts/DateContext";
 
 export default function Habit(props) {
   const [habitRow, setHabitRow] = useState([]);
-  const { user_id, routine_name, routine_yyyymm, routine_values, goal } = props;
+  const { user_id, routine_id, routine_name, routine_yyyymm, routine_values, goal, handleDelete, editing } = props;
   const [tempBoxState, setTempBoxState] = useState(JSON.parse(routine_values));
   const [boxes, setBoxes] = useState(JSON.parse(routine_values));
-  
+  const { date } = useDate();
+  const [updatedHabitName, setUpdatedHabitName] = useState(routine_name);
+  const [updatedGoal, setUpdatedGoal] = useState(goal);
+
   // debounce
   useEffect(() => {
     const timeoutID = setTimeout(() => {
@@ -33,10 +38,21 @@ export default function Habit(props) {
     return () => clearTimeout(timeoutID);
   }, [boxes]);
 
+
+
   useEffect(() => {
     let newRow = [];
 
-    newRow.push(<span key="routine_name" className="text-column">{routine_name}</span>);
+    newRow.push(
+      <DeleteIcon onClick={() => handleDelete(routine_id)} style={{"visibility": (editing ? "visible" : "hidden")}} />
+    )
+
+    newRow.push(
+      editing ? 
+      <input key="routine_name" type="text" defaultValue={updatedHabitName} onChange={handleNameChange}/>
+      :
+      <span key="routine_name" className="text-column">{routine_name}</span>
+    );
 
     const today = new Date();
     const currentMonth = getYYYYMM(today);
@@ -58,14 +74,26 @@ export default function Habit(props) {
         {boxes.filter(Boolean).length}
       </span>
     );
+    
     newRow.push(
+      editing ? 
+      <input key="goalHeaderColumn" type="number" defaultValue={updatedGoal} min="1" max={getNumberOfDaysInMonth(date)} onChange={handleGoalChange}/>
+      :
       <span key="goalHeaderColumn" className="text-column" id="goalHeaderColumn">
         {goal}
       </span>
     );
 
     setHabitRow([newRow]);
-  }, [boxes]);
+  }, [boxes, editing]);
+
+  function handleNameChange(e) {
+    setUpdatedHabitName(e.target.value);
+  }
+  
+  function handleGoalChange(e) {
+    setUpdatedGoal(e.target.value);
+  }
 
   function toggle(id) {
     setBoxes((prevBoxes) => {
@@ -76,9 +104,9 @@ export default function Habit(props) {
     });
   }
 
-  function achievedGoal() {
-    return boxArray.filter(Boolean).length;
-  }
+  // function achievedGoal() {
+  //   return boxArray.filter(Boolean).length;
+  // }
 
 
   return <div style={calendarBoxStyle(boxes.length)}>{habitRow}</div>;
