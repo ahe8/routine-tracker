@@ -55,7 +55,6 @@ app.post("/:uid/routines", async (req, res) => {
   try {
     const user_id = req.params.uid;
     const { routine_name, routine_yyyymm, routine_values, goal } = req.body;
-    console.log(req.body);
     const newRoutine = await pool.query(
       "INSERT INTO routines(user_id,routine_name,routine_yyyymm,routine_values,is_active,goal) VALUES ($1,$2,$3,$4,true,$5)",
       [user_id, routine_name, routine_yyyymm, routine_values, goal]
@@ -94,18 +93,33 @@ app.get("/:uid/routine/active", async (req, res) => {
   }
 });
 
-// update routine name
-app.put("/:uid/routines/name", async (req, res) => {
+// update routine name/goal
+app.put("/:uid/routines/edit", async (req, res) => {
   try {
     const user_id = req.params.uid;
-    const { routine_id, routine_name } = req.body; // Expect routine_id and routine_name from the request body
+    // const { routine_id, routine_name } = req.body; // Expect routine_id and routine_name from the request body
+    let updates = req.body;
 
-    const updateRoutine = await pool.query(
-      "UPDATE routines SET routine_name = $1 WHERE user_id = $2 AND routine_id = $3",
-      [routine_name, user_id, routine_id]
-    );
+    let sqlQuery = "BEGIN;";
 
-    res.json(updateRoutine);
+    updates.forEach(habit => {
+      let query = `UPDATE routines SET `
+      if(!habit.hasOwnProperty('routine_name') && habit.hasOwnProperty('goal')) {
+        query = query + `goal = ${habit['goal']}`
+      } else if(!habit.hasOwnProperty('goal') && habit.hasOwnProperty('routine_name')) {
+        query = query + `routine_name = '${habit['routine_name']}'`
+      } else if (habit.hasOwnProperty('goal') && habit.hasOwnProperty('routine_name')){
+        query = query + ` routine_name = '${habit['routine_name']}', goal = ${habit['goal']}`
+      }
+      query = query + ` WHERE user_id = '${user_id}' AND routine_id = ${habit['routine_id']};`
+      sqlQuery = sqlQuery + query;
+    })
+
+    sqlQuery = sqlQuery + 'COMMIT;';
+
+    const updateRoutine = await pool.query(sqlQuery);
+
+    res.json(updateRoutine.rows);
   } catch (err) {
     console.error(err.message);
   }

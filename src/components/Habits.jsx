@@ -11,7 +11,8 @@ export default function Habits() {
   const [newHabitGoal, setNewHabitGoal] = useState(1);
   const currUser = useAuth().currentUser;
   const { setEarliestMonth, date } = useDate();
-  const [editingHabitId, setEditingHabitId] = useState(null);
+
+  const [editedHabits, setEditedHabits] = useState({});
   const [editedHabitName, setEditedHabitName] = useState("");
   const [editingHabit, setEditingHabit] = useState(false);
 
@@ -39,6 +40,7 @@ export default function Habits() {
   }
 
   function toggleEditingHabit() {
+    setEditedHabits({});
     setEditingHabit(prevState => !prevState);
   }
 
@@ -81,6 +83,55 @@ export default function Habits() {
     }
   }
 
+  function handleEditChange(routineId, changeType, updatedValue) {
+    setEditedHabits(prevEditedHabits => {
+      return {
+        ...prevEditedHabits, 
+        [routineId]: {
+          ...prevEditedHabits[routineId],
+          [changeType]: updatedValue
+        }
+      }
+    })
+  }
+
+  function flattenAndNormalizeObject(obj) {
+    let res = [];
+    for(let key in obj) {
+      res.push({
+        "routine_id":Number(key),
+        ...obj[key]
+      })
+    }
+    return res;
+  }
+
+
+
+  async function handleEditSave() {
+    try {
+      let updateData = flattenAndNormalizeObject(editedHabits);
+      
+      await fetch(`http://localhost:5001/${currUser.uid}/routines/edit`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updateData),
+      });
+      
+      await fetch(`http://localhost:5001/${currUser.uid}/routines`)
+      .then(res => res.json())
+      .then(data => setHabits(data));
+
+      await fetch(`http://localhost:5001/${currUser.uid}/earliest_month`)
+      .then(res => res.json())
+      .then(data => setEarliestMonth(data));
+
+      toggleEditingHabit();
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
   async function handleDelete(routineId) {
     try {
       await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
@@ -100,63 +151,17 @@ export default function Habits() {
     }
   }
 
-  
-  async function handleEditSave(routineId) {
-    try {
-      // Send update request to server
-      await fetch(`http://localhost:5001/${currUser.uid}/routines/name`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          routine_id: routineId,
-          routine_name: editedHabitName,
-        }),
-      });
-
-      // Update the habit's name in the state
-      setHabits((prevHabits) =>
-        prevHabits.map((habit) =>
-          habit.routine_id === routineId
-            ? { ...habit, routine_name: editedHabitName }
-            : habit
-        )
-      );
-
-      // Reset editing state
-      setEditingHabitId(null);
-      setEditedHabitName("");
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   let habitElements = habits
     .filter((habit) => habit["routine_yyyymm"] === getYYYYMM(date))
     .map((habit) => (
-      <div key={habit["routine_id"]}>
-        {editingHabitId === habit["routine_id"] ? (
-          <>
-            <input
-              type="text"
-              value={editedHabitName}
-              onChange={(e) => setEditedHabitName(e.target.value)}
-            />
-            <button onClick={() => handleEditSave(habit["routine_id"])}>
-              Save
-            </button>
-          </>
-        ) : (
-          <>
-            <Habit key={habit["routine_id"]} {...habit} editing={editingHabit} handleDelete={handleDelete}/>
-            <button onClick={() => setEditingHabitId(habit["routine_id"])}>
-              Edit
-            </button>
-            <button onClick={() => handleDelete(habit["routine_id"])}>
-              Delete
-            </button>
-          </>
-        )}
-      </div>
+      <Habit 
+        key={habit["routine_id"]} 
+        {...habit} 
+        editing={editingHabit} 
+        handleEditChange={handleEditChange}
+        handleDelete={handleDelete}
+      />
     ));
 
   return (
@@ -184,7 +189,7 @@ export default function Habits() {
           <button className="editHabitButton" onClick={toggleEditingHabit}>
             Discard Changes
           </button>
-          <button>
+          <button onClick={handleEditSave}>
             Save Changes
           </button>
         </div>

@@ -6,12 +6,10 @@ import { useDate } from "../contexts/DateContext";
 
 export default function Habit(props) {
   const [habitRow, setHabitRow] = useState([]);
-  const { user_id, routine_id, routine_name, routine_yyyymm, routine_values, goal, handleDelete, editing } = props;
+  const { user_id, routine_id, routine_name, routine_yyyymm, routine_values, goal, handleEditChange, handleDelete, editing } = props;
   const [tempBoxState, setTempBoxState] = useState(JSON.parse(routine_values));
   const [boxes, setBoxes] = useState(JSON.parse(routine_values));
   const { date } = useDate();
-  const [updatedHabitName, setUpdatedHabitName] = useState(routine_name);
-  const [updatedGoal, setUpdatedGoal] = useState(goal);
 
   // debounce
   useEffect(() => {
@@ -49,7 +47,7 @@ export default function Habit(props) {
 
     newRow.push(
       editing ? 
-      <input key="routine_name" type="text" defaultValue={updatedHabitName} onChange={handleNameChange}/>
+      <input key="routine_name" type="text" defaultValue={routine_name} name="routine_name" onChange={handleGoalChange}/>
       :
       <span key="routine_name" className="text-column">{routine_name}</span>
     );
@@ -77,7 +75,7 @@ export default function Habit(props) {
     
     newRow.push(
       editing ? 
-      <input key="goalHeaderColumn" type="number" defaultValue={updatedGoal} min="1" max={getNumberOfDaysInMonth(date)} onChange={handleGoalChange}/>
+      <input key="goalHeaderColumn" type="number" defaultValue={goal} min="1" max={getNumberOfDaysInMonth(date)} name="goal" onChange={handleGoalChange}/>
       :
       <span key="goalHeaderColumn" className="text-column" id="goalHeaderColumn">
         {goal}
@@ -86,13 +84,13 @@ export default function Habit(props) {
 
     setHabitRow([newRow]);
   }, [boxes, editing]);
-
-  function handleNameChange(e) {
-    setUpdatedHabitName(e.target.value);
-  }
   
   function handleGoalChange(e) {
-    setUpdatedGoal(e.target.value);
+    if(e.target.name === 'goal') {
+      handleEditChange(routine_id, e.target.name, Number(e.target.value));
+    } else {
+      handleEditChange(routine_id, e.target.name, e.target.value);
+    }     
   }
 
   function toggle(id) {
