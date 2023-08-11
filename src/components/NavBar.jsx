@@ -26,6 +26,13 @@ const NavBar = () => {
     setAnchorEl(null);
   };
 
+  const handleMenuItemClick = (option) => {
+    if (option === "Logout") {
+      logout();
+    }
+    handleMouseLeave();
+  };
+
   const logout = () => {
     const auth = getAuth();
     signOut(auth)
@@ -92,8 +99,7 @@ const NavBar = () => {
           {options.map((option) => (
             <MenuItem
               key={option}
-              selected={option === "Logout"} // Update this condition accordingly
-              onClick={logout}
+              onClick={() => handleMenuItemClick(option)}
               sx={{
                 "&:hover": {
                   color: option === "Logout" ? "red" : "inherit",
