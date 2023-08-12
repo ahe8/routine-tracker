@@ -104,11 +104,11 @@ app.put("/:uid/routines/edit", async (req, res) => {
 
     updates.forEach(habit => {
       let query = `UPDATE routines SET `
-      if(!habit.hasOwnProperty('routine_name') && habit.hasOwnProperty('goal')) {
+      if (!habit.hasOwnProperty('routine_name') && habit.hasOwnProperty('goal')) {
         query = query + `goal = ${habit['goal']}`
-      } else if(!habit.hasOwnProperty('goal') && habit.hasOwnProperty('routine_name')) {
+      } else if (!habit.hasOwnProperty('goal') && habit.hasOwnProperty('routine_name')) {
         query = query + `routine_name = '${habit['routine_name']}'`
-      } else if (habit.hasOwnProperty('goal') && habit.hasOwnProperty('routine_name')){
+      } else if (habit.hasOwnProperty('goal') && habit.hasOwnProperty('routine_name')) {
         query = query + ` routine_name = '${habit['routine_name']}', goal = ${habit['goal']}`
       }
       query = query + ` WHERE user_id = '${user_id}' AND routine_id = ${habit['routine_id']};`
@@ -241,5 +241,5 @@ app.delete("/:uid/notes/:id", async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Listening on port ${port}...`);
-  });
+  console.log(`Listening on port ${port}...`);
+});

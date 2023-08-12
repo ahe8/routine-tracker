@@ -42,27 +42,27 @@ export default function Habit(props) {
     let newRow = [];
 
     newRow.push(
-      <DeleteIcon onClick={() => handleDelete(routine_id)} style={{"visibility": (editing ? "visible" : "hidden")}} />
+      <DeleteIcon className="deleteIcon" onClick={() => handleDelete(routine_id)} style={{ "visibility": (editing ? "visible" : "hidden") }} />
     )
 
     newRow.push(
-      editing ? 
-      <input key="routine_name" type="text" defaultValue={routine_name} name="routine_name" onChange={handleGoalChange}/>
-      :
-      <span key="routine_name" className="text-column">{routine_name}</span>
+      editing ?
+        <input key="routine_name" type="text" defaultValue={routine_name} name="routine_name" onChange={handleGoalChange} />
+        :
+        <span key="routine_name" className="text-column">{routine_name}</span>
     );
 
     const today = new Date();
     const currentMonth = getYYYYMM(today);
 
     for (let day = 0; day < boxes.length; day++) {
-      if (routine_yyyymm === currentMonth && day > today.getDate() - 1){
+      if (routine_yyyymm === currentMonth && day > today.getDate() - 1) {
         newRow.push(
-          <HabitBox key={day} id={day} toggle={toggle} checked={boxes[day]} disabled={true}/>
+          <HabitBox key={day} id={day} toggle={toggle} checked={boxes[day]} disabled={true} />
         );
       } else {
         newRow.push(
-          <HabitBox key={day} id={day} toggle={toggle} checked={boxes[day]} disabled={false}/>
+          <HabitBox key={day} id={day} toggle={toggle} checked={boxes[day]} disabled={false} />
         );
       }
     }
@@ -72,25 +72,25 @@ export default function Habit(props) {
         {boxes.filter(Boolean).length}
       </span>
     );
-    
+
     newRow.push(
-      editing ? 
-      <input key="goalHeaderColumn" type="number" defaultValue={goal} min="1" max={getNumberOfDaysInMonth(date)} name="goal" onChange={handleGoalChange}/>
-      :
-      <span key="goalHeaderColumn" className="text-column" id="goalHeaderColumn">
-        {goal}
-      </span>
+      editing ?
+        <input key="goalHeaderColumn" type="number" defaultValue={goal} min="1" max={getNumberOfDaysInMonth(date)} name="goal" onChange={handleGoalChange} />
+        :
+        <span key="goalHeaderColumn" className="text-column" id="goalHeaderColumn">
+          {goal}
+        </span>
     );
 
     setHabitRow([newRow]);
   }, [boxes, editing]);
-  
+
   function handleGoalChange(e) {
-    if(e.target.name === 'goal') {
+    if (e.target.name === 'goal') {
       handleEditChange(routine_id, e.target.name, Number(e.target.value));
     } else {
       handleEditChange(routine_id, e.target.name, e.target.value);
-    }     
+    }
   }
 
   function toggle(id) {

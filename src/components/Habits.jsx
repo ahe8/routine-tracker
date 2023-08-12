@@ -3,6 +3,7 @@ import { calendarStyle, getNumberOfDaysInMonth, getYYYYMM } from "../utils";
 import Habit from "./Habit";
 import { useAuth } from "../contexts/AuthContext";
 import { useDate } from "../contexts/DateContext";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 
 export default function Habits() {
   const [habits, setHabits] = useState([]);
@@ -13,8 +14,9 @@ export default function Habits() {
   const { setEarliestMonth, date } = useDate();
 
   const [editedHabits, setEditedHabits] = useState({});
-  const [editedHabitName, setEditedHabitName] = useState("");
   const [editingHabit, setEditingHabit] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [currHabitToDelete, setCurrHabitToDelete] = useState();
 
   useEffect(() => {
     if (currUser) {
@@ -86,7 +88,7 @@ export default function Habits() {
   function handleEditChange(routineId, changeType, updatedValue) {
     setEditedHabits(prevEditedHabits => {
       return {
-        ...prevEditedHabits, 
+        ...prevEditedHabits,
         [routineId]: {
           ...prevEditedHabits[routineId],
           [changeType]: updatedValue
@@ -97,55 +99,65 @@ export default function Habits() {
 
   function flattenAndNormalizeObject(obj) {
     let res = [];
-    for(let key in obj) {
+    for (let key in obj) {
       res.push({
-        "routine_id":Number(key),
+        "routine_id": Number(key),
         ...obj[key]
       })
     }
     return res;
   }
 
-
-
   async function handleEditSave() {
     try {
       let updateData = flattenAndNormalizeObject(editedHabits);
-      
+
       await fetch(`http://localhost:5001/${currUser.uid}/routines/edit`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updateData),
       });
-      
+
       await fetch(`http://localhost:5001/${currUser.uid}/routines`)
-      .then(res => res.json())
-      .then(data => setHabits(data));
+        .then(res => res.json())
+        .then(data => setHabits(data));
 
       await fetch(`http://localhost:5001/${currUser.uid}/earliest_month`)
-      .then(res => res.json())
-      .then(data => setEarliestMonth(data));
+        .then(res => res.json())
+        .then(data => setEarliestMonth(data));
 
       toggleEditingHabit();
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   }
 
-  async function handleDelete(routineId) {
+  function handleDelete(routineId) {
+    setShowDeleteDialog(true);
+    setCurrHabitToDelete(routineId);
+  }
+
+  function handleClose() {
+    setShowDeleteDialog(false);
+    setCurrHabitToDelete();
+  }
+
+  async function deleteHabit() {
     try {
       await fetch(`http://localhost:5001/${currUser.uid}/routines`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          routine_id: routineId,
+          routine_id: currHabitToDelete,
         }),
       });
 
       // Remove the deleted habit from the state
       setHabits((prevHabits) =>
-        prevHabits.filter((habit) => habit.routine_id !== routineId)
+        prevHabits.filter((habit) => habit.routine_id !== currHabitToDelete)
       );
+
+      handleClose();
     } catch (err) {
       console.log(err);
     }
@@ -155,10 +167,10 @@ export default function Habits() {
   let habitElements = habits
     .filter((habit) => habit["routine_yyyymm"] === getYYYYMM(date))
     .map((habit) => (
-      <Habit 
-        key={habit["routine_id"]} 
-        {...habit} 
-        editing={editingHabit} 
+      <Habit
+        key={habit["routine_id"]}
+        {...habit}
+        editing={editingHabit}
         handleEditChange={handleEditChange}
         handleDelete={handleDelete}
       />
@@ -176,13 +188,19 @@ export default function Habits() {
       {addingHabit && (
         <form className="addHabitForm" onSubmit={handleSubmit}>
           <label>Habit name</label>
-          <input type="text" placeholder="New habit" onChange={handleNameChange} required/>
+          <input type="text" placeholder="New habit" onChange={handleNameChange} required />
           <label>Monthly goal</label>
-          <input type="number" placeholder="# of days goal" min="1" max={getNumberOfDaysInMonth(date)} onChange={handleGoalChange} required/>
+          <input type="number" placeholder="# of days goal" min="1" max={getNumberOfDaysInMonth(date)} onChange={handleGoalChange} required />
           {/* <button>Daily</button><button>Weekly</button><button>4x a Week</button> */}
           <input type="submit" value="Add" />
         </form>
       )}
+
+      <ConfirmDeleteDialog
+        showDeleteDialog={showDeleteDialog}
+        handleClose={handleClose}
+        deleteHabit={deleteHabit}
+      />
 
       {editingHabit ? (
         <div>

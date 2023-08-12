@@ -44,8 +44,12 @@
 }
 
 .addHabitForm * {
-  display:block;
-  margin:auto;
-  margin-top:0.5em;
+  display: block;
+  margin: auto;
+  margin-top: 0.5em;
   text-align: center;
+}
+
+.deleteIcon {
+  margin-top: 0.75em;
 }
