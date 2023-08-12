@@ -242,8 +242,4 @@ app.delete("/:uid/notes/:id", async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> 6b2cdb18b2d399f8ab34cbb66f0a8b58edf9ff90
