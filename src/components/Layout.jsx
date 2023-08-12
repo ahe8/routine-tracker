@@ -1,7 +1,10 @@
+import { Container, Grid } from "@mui/material";
+
 import Calendar from "./Calendar";
 import Header from "./Header";
 import NavBar from "./NavBar";
 import Notes from "./Notes";
+
 import { useAuth } from "../contexts/AuthContext";
 
 //Style
@@ -20,24 +23,29 @@ export default function Layout() {
           body: {
             backgroundColor: theme.primary.background,
             color: theme.primary.font,
+            height: "100%",
+            overflow: "hidden",
+            width: "100%",
           },
         }}
       />
-      {currUser && <NavBar />}
-      <Header />
+      <Container>
+        <Grid item xs={12}>
+          {currUser && <NavBar />}
+          <Header />
+        </Grid>
+      </Container>
+      {currUser === undefined ? (
+        <CircularProgress />
+      ) : currUser === null ? (
+        <LandingPage />
+      ) : (
+        <>
+          <Calendar />
 
-      {currUser === undefined ?
-        <CircularProgress/> 
-        :
-        (currUser === null ?
-          <LandingPage/>
-          :
-          <>
-            <Calendar />
-            <Notes />
-          </>
-        )        
-      }
+          <Notes />
+        </>
+      )}
     </>
   );
 }

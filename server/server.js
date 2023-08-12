@@ -3,7 +3,7 @@ const port = process.env.REACT_APP_PORT || 5001; // Default to 5001 if not provi
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const pool = require("./db");
+const { pool: pool } = require("./db");
 
 //middleware
 app.use(cors());
@@ -242,4 +242,8 @@ app.delete("/:uid/notes/:id", async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> 6b2cdb18b2d399f8ab34cbb66f0a8b58edf9ff90

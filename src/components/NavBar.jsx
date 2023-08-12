@@ -1,21 +1,48 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Grid, Typography, Popover } from "@mui/material";
+import { getAuth, signOut } from "firebase/auth";
+
+// Components
+import { Box, Grid, Typography, Menu, MenuItem } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import { useAuth } from "../contexts/AuthContext";
 
 const NavBar = () => {
   const [userFirstName, setUserFirstName] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
   const currUser = useAuth().currentUser;
 
-  const handlePopoverOpen = (event) => {
+  const options = ["Profile", "Report", "Delete account", "Logout"];
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const open = Boolean(anchorEl);
+
+  const handleMouseEnter = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handlePopoverClose = () => {
+  const handleMouseLeave = () => {
     setAnchorEl(null);
+  };
+
+  const handleMenuItemClick = (option) => {
+    if (option === "Logout") {
+      logout();
+    }
+    handleMouseLeave();
+  };
+
+  const logout = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        window.location.reload();
+        console.log("signed out");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
@@ -34,53 +61,56 @@ const NavBar = () => {
     <Grid
       container
       direction="row"
-      justifyContent="center"
+      justifyContent="space-between" // Adjust the main alignment to space-between
       alignItems="center"
       height={"100%"}
     >
-      <Grid>
-        <Box display="flex">
+      <Box display="flex" alignItems="center">
+        <Box id="right-app-name">
           <Typography variant="p" component="p" fontSize={15} marginRight={1}>
-            Hello
+            Routine Tracker
           </Typography>
-          <Typography
-            variant="p"
-            component="p"
-            fontSize={15}
-            fontWeight={"500"}
-            marginRight={1}
-          >
-            {userFirstName}
-          </Typography>
-          <AccountCircleIcon
-            sx={{ fontSize: "25px" }}
-            onClick={handlePopoverOpen}
-          />
-          {anchorEl && (
-            <Popover
-              id="avatar-popover"
-              anchorEl={anchorEl}
-              onClose={handlePopoverClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorEl)}
-            >
-              <Typography
-                sx={{ p: 1, width: "150px", cursor: "pointer" }}
-                fontWeight={700}
-                onClick={async () => {
-                  await apiLogout();
-                  navigate("/login");
-                }}
-              >
-                Log out
-              </Typography>
-            </Popover>
-          )}
         </Box>
-      </Grid>
+      </Box>
+
+      <Box
+        display="flex"
+        alignItems="center"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <Typography variant="p" component="p" fontSize={15} marginRight={1}>
+          Hello, {userFirstName}
+        </Typography>
+        <AccountCircleIcon sx={{ fontSize: "25px" }} />
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleMouseLeave}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        >
+          {options.map((option) => (
+            <MenuItem
+              key={option}
+              onClick={() => handleMenuItemClick(option)}
+              sx={{
+                "&:hover": {
+                  color: option === "Logout" ? "red" : "inherit",
+                },
+              }}
+            >
+              {option}
+            </MenuItem>
+          ))}
+        </Menu>
+      </Box>
     </Grid>
   );
 };

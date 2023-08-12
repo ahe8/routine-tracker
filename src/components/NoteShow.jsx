@@ -30,7 +30,6 @@ function NoteShow({ note, onDelete, onEdit }) {
 
   const handlePopoverClose = () => {
     setAnchorEl(null);
-    // setAnchorElForDelete(null);
   };
 
   const handleDeleteClick = () => {
@@ -45,7 +44,6 @@ function NoteShow({ note, onDelete, onEdit }) {
 
   const handlePopoverDeleteClose = () => {
     setAnchorElForDelete(null);
-    // setAnchorEl(null);
   };
 
   const content = (
@@ -64,7 +62,15 @@ function NoteShow({ note, onDelete, onEdit }) {
       onMouseEnter={() => setShowIcons(true)}
       onMouseLeave={() => setShowIcons(false)}
     >
-      <Box sx={{ width: 1000, border: 1, p: 3, m: 1 }}>
+      <Box
+        sx={{
+          width: 1000,
+          border: 1,
+          p: 3,
+          m: 1,
+          backgroundColor: showIcons ? theme.secondary.darker : "",
+        }}
+      >
         <Grid container spacing={2}>
           <Grid
             item
