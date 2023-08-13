@@ -28,7 +28,8 @@
 }
 
 .newHabitButton {
-  margin-top: 0.5em;
+  margin: 0.5em;
+  
 }
 
 .errorMsg {
@@ -52,4 +53,8 @@
 
 .deleteIcon {
   margin-top: 0.75em;
+}
+
+.habitButton {
+  border-radius: 0;
 }
