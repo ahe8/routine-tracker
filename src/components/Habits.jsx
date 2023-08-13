@@ -24,6 +24,12 @@ export default function Habits() {
     return habits;
   }
 
+  async function fetchEarliestMonth(userId) {
+    const response = await fetch(`http://localhost:5001/${userId}/earliest_month`);
+    const earliestMonth = await response.json();
+    return earliestMonth;
+  }
+
 
   useEffect(() => {
     let isApiSubscribed = true;
@@ -43,7 +49,7 @@ export default function Habits() {
           }
         })
 
-      fetchHabits(currUser.uid)
+      fetchEarliestMonth(currUser.uid)
         .then(data => setEarliestMonth(data));
 
       return () => {
@@ -160,12 +166,10 @@ export default function Habits() {
         body: JSON.stringify(updateData),
       });
 
-      await fetch(`http://localhost:5001/${currUser.uid}/routines`)
-        .then(res => res.json())
+      await fetchHabits(currUser.id)
         .then(data => setHabits(data));
 
-      await fetch(`http://localhost:5001/${currUser.uid}/earliest_month`)
-        .then(res => res.json())
+      await fetchEarliestMonth(currUser.id)
         .then(data => setEarliestMonth(data));
 
       toggleEditingHabit();
