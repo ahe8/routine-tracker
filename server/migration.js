@@ -22,7 +22,6 @@ const migrate = async (pool) => {
     routine_name VARCHAR(255), 
     routine_yyyymm integer, 
     routine_values VARCHAR(255), 
-    is_active BOOLEAN, 
     goal integer \
   )`
   );

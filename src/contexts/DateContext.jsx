@@ -11,7 +11,7 @@ export function DateProvider({ children }) {
     const [date, setDate] = useState(new Date);
     const [prevMonth, setPrevMonth] = useState(false);
     const [nextMonth, setNextMonth] = useState(false);
-    const [earliestMonth, setEarliestMonth] = useState(); 
+    const [earliestMonth, setEarliestMonth] = useState();
 
     useEffect(() => {
         const currentMonth = getYYYYMM(date);
@@ -29,9 +29,9 @@ export function DateProvider({ children }) {
         }
     }, [date, earliestMonth]);
 
-    function changeToPrevMonth() {
-        const month = date.getMonth();
-        const year = date.getFullYear();
+    function getPrevMonth(currDate) {
+        const month = currDate.getMonth();
+        const year = currDate.getFullYear();
 
         let newDate;
 
@@ -40,12 +40,16 @@ export function DateProvider({ children }) {
         } else {
             newDate = new Date(year, month - 1);
         }
-        setDate(newDate);
+        return newDate;
     }
 
-    function changeToNextMonth() {
-        const month = date.getMonth();
-        const year = date.getFullYear();
+    function changeToPrevMonth() {
+        setDate(getPrevMonth(date));
+    }
+
+    function getNextMonth(currDate) {
+        const month = currDate.getMonth();
+        const year = currDate.getFullYear();
 
         let newDate;
 
@@ -54,8 +58,11 @@ export function DateProvider({ children }) {
         } else {
             newDate = new Date(year, month + 1)
         }
+        return newDate;
+    }
 
-        setDate(newDate);
+    function changeToNextMonth() {
+        setDate(getNextMonth(date));
     }
 
     const value = {
@@ -64,6 +71,8 @@ export function DateProvider({ children }) {
         changeToNextMonth,
         prevMonth,
         nextMonth,
+        getPrevMonth,
+        getNextMonth,
         setEarliestMonth
     };
 

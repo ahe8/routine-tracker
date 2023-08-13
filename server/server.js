@@ -56,7 +56,7 @@ app.post("/:uid/routines", async (req, res) => {
     const user_id = req.params.uid;
     const { routine_name, routine_yyyymm, routine_values, goal } = req.body;
     const newRoutine = await pool.query(
-      "INSERT INTO routines(user_id,routine_name,routine_yyyymm,routine_values,is_active,goal) VALUES ($1,$2,$3,$4,true,$5)",
+      "INSERT INTO routines(user_id,routine_name,routine_yyyymm,routine_values,goal) VALUES ($1,$2,$3,$4,$5)",
       [user_id, routine_name, routine_yyyymm, routine_values, goal]
     );
     res.json(newRoutine.rows[0]);
@@ -74,20 +74,6 @@ app.get("/:uid/routines", async (req, res) => {
       [user_id]
     );
     res.json(allRoutines.rows);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
-// get active routine names
-app.get("/:uid/routine/active", async (req, res) => {
-  try {
-    const user_id = req.params.uid;
-    const routines = await pool.query(
-      "SELECT routine_name FROM routines WHERE user_id = $1 AND is_active = true DISTINCT ORDER BY routine_id ASC",
-      [user_id]
-    );
-    res.json(routines.rows);
   } catch (err) {
     console.error(err.message);
   }
@@ -135,6 +121,30 @@ app.put("/:uid/routines/values", async (req, res) => {
       [routine_values, user_id, routine_name]
     );
     res.json(updateRoutine);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// bulk insert routine
+app.post("/:uid/routines/bulk", async (req, res) => {
+  try {
+    const user_id = req.params.uid;
+    let updates = req.body;
+
+    let sqlQuery = "BEGIN;";
+
+
+    updates.forEach((habit) => {
+      const { routine_name, routine_yyyymm, routine_values, goal } = habit;
+      sqlQuery = sqlQuery + `INSERT INTO routines(user_id,routine_name,routine_yyyymm,routine_values,goal) VALUES ('${user_id}', '${routine_name}', ${routine_yyyymm}, '${routine_values}', ${goal});`
+    })
+
+    sqlQuery = sqlQuery + 'COMMIT;';
+
+    const updateRoutine = await pool.query(sqlQuery);
+
+    res.json(updateRoutine.rows);
   } catch (err) {
     console.error(err.message);
   }

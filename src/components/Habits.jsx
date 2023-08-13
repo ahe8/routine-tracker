@@ -11,31 +11,73 @@ export default function Habits() {
   const [newHabitName, setNewHabitName] = useState("");
   const [newHabitGoal, setNewHabitGoal] = useState(1);
   const currUser = useAuth().currentUser;
-  const { setEarliestMonth, date } = useDate();
+  const { setEarliestMonth, date, getPrevMonth } = useDate();
 
   const [editedHabits, setEditedHabits] = useState({});
   const [editingHabit, setEditingHabit] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [currHabitToDelete, setCurrHabitToDelete] = useState();
 
-  useEffect(() => {
-    if (currUser) {
-      try {
-        // fetch all habits
-        fetch(`http://localhost:5001/${currUser.uid}/routines`)
-          .then((res) => res.json())
-          .then((data) => {
-            setHabits(data);
-          });
+  async function fetchHabits(userId) {
+    const response = await fetch(`http://localhost:5001/${userId}/routines`);
+    const habits = await response.json();
+    return habits;
+  }
 
-        fetch(`http://localhost:5001/${currUser.uid}/earliest_month`)
-          .then((res) => res.json())
-          .then((data) => setEarliestMonth(data));
-      } catch (err) {
-        console.log(err);
-      }
+
+  useEffect(() => {
+    let isApiSubscribed = true;
+    try {
+      fetchHabits(currUser.uid)
+        .then(data => {
+          if (isApiSubscribed) {
+            setHabits(data)
+            if (getYYYYMM(date) === getYYYYMM(new Date())) {
+              const currHabits = data.filter(habit => habit['routine_yyyymm'] === getYYYYMM(date));
+              if (currHabits.length === 0) {
+                const prevMonth = getYYYYMM(getPrevMonth(date));
+                const prevMonthHabits = data.filter(habit => habit['routine_yyyymm'] === prevMonth);
+                generateHabitsForNewMonth(prevMonthHabits);
+              }
+            }
+          }
+        })
+
+      fetchHabits(currUser.uid)
+        .then(data => setEarliestMonth(data));
+
+      return () => {
+        // cancel the subscription
+        isApiSubscribed = false;
+      };
+
+    } catch (err) {
+      console.log(err);
     }
-  }, [currUser]);
+
+  }, [currUser.uid]);
+
+  async function generateHabitsForNewMonth(prevMonthHabits) {
+    let habitsForNewMonth = [];
+    prevMonthHabits.forEach(habit =>
+      habitsForNewMonth.push(
+        {
+          ...habit,
+          'routine_yyyymm': getYYYYMM(new Date())
+        }
+      )
+    )
+
+    fetch(`http://localhost:5001/${currUser.uid}/routines/bulk`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(habitsForNewMonth),
+    })
+      .then(() => {
+        setHabits(prevHabits => [...prevHabits, ...habitsForNewMonth]);
+      })
+      .catch(err => console.log(err));
+  }
 
   function toggleAddingHabit() {
     setAddingHabit(prevState => !prevState);
