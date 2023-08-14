@@ -115,10 +115,10 @@ app.put("/:uid/routines/edit", async (req, res) => {
 app.put("/:uid/routines/values", async (req, res) => {
   try {
     const user_id = req.params.uid;
-    const { routine_values, routine_name } = req.body;
+    const { routine_values, routine_id } = req.body;
     const updateRoutine = await pool.query(
-      "UPDATE routines SET routine_values = $1 WHERE user_id = $2 AND routine_name = $3",
-      [routine_values, user_id, routine_name]
+      "UPDATE routines SET routine_values = $1 WHERE user_id = $2 AND routine_id = $3",
+      [routine_values, user_id, routine_id]
     );
     res.json(updateRoutine);
   } catch (err) {

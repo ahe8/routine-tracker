@@ -42,7 +42,7 @@ export default function Habit(props) {
     let newRow = [];
 
     newRow.push(
-      <DeleteIcon className="deleteIcon" onClick={() => handleDelete(routine_id)} style={{ "visibility": (editing ? "visible" : "hidden") }} />
+      <DeleteIcon key="deleteIcon" className="deleteIcon" onClick={() => handleDelete(routine_id)} style={{ "visibility": (editing ? "visible" : "hidden") }} />
     )
 
     newRow.push(
@@ -107,5 +107,9 @@ export default function Habit(props) {
   // }
 
 
-  return <div style={calendarBoxStyle(boxes.length)}>{habitRow}</div>;
+  return (
+    <div style={calendarBoxStyle(boxes.length)}>
+      {habitRow}
+    </div>
+  );
 }
