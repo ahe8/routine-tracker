@@ -40,8 +40,22 @@ export const getYYYYMM = (date) => {
     return Number(res);
 };
 
+export const getBounds = (date, maxSize, calendarLength) => {
+    const today = new Date();
+    if(getYYYYMM(date) === getYYYYMM(today)) {
+      if (maxSize >= today.getDate()) {
+        return [1, Math.min(maxSize, calendarLength)];
+      } else {
+        return [today.getDate() - maxSize + 1, today.getDate()];
+      }
+
+    } else {
+      return [Math.max(1, calendarLength - maxSize + 1), calendarLength];
+    }
+  }
+
 export const getMaxBoxes = (windowWidth) => {
-    const EM_TO_PX = 16;
+    const EM_TO_PX = 16; // using default font size of 16
 
     const otherColumns = 20; //em    
 

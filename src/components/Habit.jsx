@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getYYYYMM, calendarBoxStyle, getNumberOfDaysInMonth, getMaxBoxes } from "../utils";
+import { getYYYYMM, calendarBoxStyle, getNumberOfDaysInMonth, getMaxBoxes, getBounds } from "../utils";
 import HabitBox from "./HabitBox";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDate } from "../contexts/DateContext";
@@ -10,6 +10,7 @@ export default function Habit(props) {
   const { user_id, routine_id, routine_name, routine_yyyymm, routine_values, goal, handleEditChange, handleDelete, editing } = props;
   const [tempBoxState, setTempBoxState] = useState(JSON.parse(routine_values));
   const [boxes, setBoxes] = useState(JSON.parse(routine_values));
+
   const { date } = useDate();
   const windowWidth = useWindowWidth();
 
@@ -58,17 +59,25 @@ export default function Habit(props) {
     const today = new Date();
     const currentMonth = getYYYYMM(today);
 
-    for (let day = 0; day < numberOfColumns; day++) {
+    let tempList = [];
+    // push all to list then use array slice to render which ones
+    for (let day = 0; day < boxes.length; day++) {
       if (routine_yyyymm === currentMonth && day > today.getDate() - 1) {
-        newRow.push(
+        tempList.push(
           <HabitBox key={day} id={day} toggle={toggle} checked={boxes[day]} disabled={true} />
         );
       } else {
-        newRow.push(
+        tempList.push(
           <HabitBox key={day} id={day} toggle={toggle} checked={boxes[day]} disabled={false} />
         );
       }
     }
+    
+    let bounds = getBounds(date, maxBoxes, boxes.length);
+
+    newRow = newRow.concat(
+      tempList.slice(bounds[0] - 1, bounds[1])
+    );
 
     newRow.push(
       <span key="achievedHeaderColumn" className="text-column" id="achievedHeaderColumn">

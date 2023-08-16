@@ -3,7 +3,7 @@ import { daysMap, calendarBoxStyle, getNumberOfDaysInMonth, getYYYYMM } from '..
 import { Button } from "@mui/material";
 import { useDate } from "../contexts/DateContext";
 import { useWindowWidth } from '@react-hook/window-size'
-import { getMaxBoxes } from '../utils';
+import { getMaxBoxes, getBounds } from '../utils';
 
 export default function CalendarHeader() {
     const [calendarHeaders, setCalendarHeaders] = useState([]);
@@ -22,7 +22,9 @@ export default function CalendarHeader() {
         let daysOfWeek = [];
         let daysInMonth = [];
 
-        for (let day = 1; day <= numberOfColumns; day++) {
+        let bounds = getBounds(date, maxBoxes, numberOfDaysInMonth);
+
+        for (let day = bounds[0]; day <= bounds[1]; day++) {
             let currDate = new Date(year, month, day).getDay();
             daysOfWeek.push(<small key={day} className="calendarBox">{daysMap[currDate]}</small>)
             daysInMonth.push(<p key={day} className="calendarBox">{day}</p>)
