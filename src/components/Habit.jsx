@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { getYYYYMM, calendarBoxStyle, getNumberOfDaysInMonth } from "../utils";
+import { getYYYYMM, calendarBoxStyle, getNumberOfDaysInMonth, getMaxBoxes } from "../utils";
 import HabitBox from "./HabitBox";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDate } from "../contexts/DateContext";
+import { useWindowWidth } from '@react-hook/window-size'
 
 export default function Habit(props) {
   const [habitRow, setHabitRow] = useState([]);
@@ -10,6 +11,10 @@ export default function Habit(props) {
   const [tempBoxState, setTempBoxState] = useState(JSON.parse(routine_values));
   const [boxes, setBoxes] = useState(JSON.parse(routine_values));
   const { date } = useDate();
+  const windowWidth = useWindowWidth();
+
+  const maxBoxes = getMaxBoxes(windowWidth);
+  const numberOfColumns = Math.min(boxes.length , maxBoxes);
 
   // debounce
   useEffect(() => {
@@ -36,8 +41,6 @@ export default function Habit(props) {
     return () => clearTimeout(timeoutID);
   }, [boxes]);
 
-
-
   useEffect(() => {
     let newRow = [];
 
@@ -55,7 +58,7 @@ export default function Habit(props) {
     const today = new Date();
     const currentMonth = getYYYYMM(today);
 
-    for (let day = 0; day < boxes.length; day++) {
+    for (let day = 0; day < numberOfColumns; day++) {
       if (routine_yyyymm === currentMonth && day > today.getDate() - 1) {
         newRow.push(
           <HabitBox key={day} id={day} toggle={toggle} checked={boxes[day]} disabled={true} />
@@ -83,7 +86,7 @@ export default function Habit(props) {
     );
 
     setHabitRow([newRow]);
-  }, [boxes, editing]);
+  }, [boxes, editing, windowWidth]);
 
   function handleGoalChange(e) {
     if (e.target.name === 'goal') {
@@ -108,7 +111,7 @@ export default function Habit(props) {
 
 
   return (
-    <div style={calendarBoxStyle(boxes.length)}>
+    <div style={calendarBoxStyle(numberOfColumns)}>
       {habitRow}
     </div>
   );

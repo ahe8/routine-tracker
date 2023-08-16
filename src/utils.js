@@ -19,7 +19,7 @@ export const calendarBoxStyle = (numberOfDaysInCurrMonth) => ({
     gridColumnGap: "1px",
     gridTemplateColumns: `2em 8em repeat(${numberOfDaysInCurrMonth}, 4em) 5em 5em`
 
-})
+});
 
 export const getNumberOfDaysInMonth = (date) => {
     const year = date.getFullYear();
@@ -38,8 +38,23 @@ export const getYYYYMM = (date) => {
     }
 
     return Number(res);
-}
+};
 
+export const getMaxBoxes = (windowWidth) => {
+    const EM_TO_PX = 16;
+
+    const otherColumns = 20; //em    
+
+    const padding = 1; //px
+
+    const startingPixelsRequired =  otherColumns * (EM_TO_PX + padding);
+
+    const boxSize = 4; //em
+
+    const boxPixelSize = boxSize * (EM_TO_PX + padding);
+
+    return Math.trunc((windowWidth - startingPixelsRequired) / boxPixelSize);
+};
 
 export const authErrors = {
     "auth/claims-too-large": "The claims payload provided to setCustomUserClaims() exceeds the maximum allowed size of 1000 bytes.",
@@ -98,4 +113,4 @@ export const authErrors = {
     "auth/unauthorized-continue-uri": "The domain of the continue URL is not whitelisted. Whitelist the domain in the Firebase Console.",
     "auth/user-not-found": "There is no existing user record corresponding to the provided identifier.",
     "auth/weak-password": "Password should be at least 6 characters long."
-}  
+};

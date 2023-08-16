@@ -2,13 +2,18 @@ import { useEffect, useState } from 'react';
 import { daysMap, calendarBoxStyle, getNumberOfDaysInMonth, getYYYYMM } from '../utils';
 import { Button } from "@mui/material";
 import { useDate } from "../contexts/DateContext";
+import { useWindowWidth } from '@react-hook/window-size'
+import { getMaxBoxes } from '../utils';
 
 export default function CalendarHeader() {
     const [calendarHeaders, setCalendarHeaders] = useState([]);
 
     const { date, prevMonth, nextMonth, changeToPrevMonth, changeToNextMonth } = useDate();
+    const windowWidth = useWindowWidth();
 
     const numberOfDaysInMonth = getNumberOfDaysInMonth(date);
+    const maxBoxes = getMaxBoxes(windowWidth);
+    const numberOfColumns = Math.min(maxBoxes, numberOfDaysInMonth);
 
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -17,21 +22,21 @@ export default function CalendarHeader() {
         let daysOfWeek = [];
         let daysInMonth = [];
 
-        for (let day = 1; day <= numberOfDaysInMonth; day++) {
+        for (let day = 1; day <= numberOfColumns; day++) {
             let currDate = new Date(year, month, day).getDay();
             daysOfWeek.push(<small key={day} className="calendarBox">{daysMap[currDate]}</small>)
             daysInMonth.push(<p key={day} className="calendarBox">{day}</p>)
         }
 
         let daysOfWeekRow =
-            <div key="0" style={calendarBoxStyle(numberOfDaysInMonth)}>
+            <div key="0" style={calendarBoxStyle(numberOfColumns)}>
                 <span></span>
                 <span></span>
                 {daysOfWeek}
             </div>
 
         let daysInMonthRow =
-            <div key="1" id="headers" style={calendarBoxStyle(numberOfDaysInMonth)}>
+            <div key="1" id="headers" style={calendarBoxStyle(numberOfColumns)}>
                 <span></span>
                 <h4>Habit</h4>
                 {daysInMonth}
@@ -39,7 +44,7 @@ export default function CalendarHeader() {
                 <h4>Monthly Goal</h4>
             </div>
         setCalendarHeaders([daysOfWeekRow, daysInMonthRow]);
-    }, [date])
+    }, [date, windowWidth])
 
     return (
         <>
