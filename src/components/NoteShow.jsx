@@ -154,7 +154,7 @@ function NoteShow({ note, onDelete, onEdit }) {
                           marginBottom={2}
                           color={theme.primary.light}
                         >
-                          Delete Note? <br />
+                          Delete this note? <br />
                         </Typography>
                         <Divider color={theme.primary.light} />
 
@@ -167,7 +167,7 @@ function NoteShow({ note, onDelete, onEdit }) {
                           marginBottom={8}
                           color={theme.primary.font}
                         >
-                          This Cannot Be undone.
+                          This action cannot be undone. Do you wish to delete this note?
                         </Typography>
                       </Grid>
                       <Grid marginLeft={3} marginBottom={1}>
