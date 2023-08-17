@@ -16,28 +16,28 @@ export default function Calendar() {
     const numberOfDaysInMonth = getNumberOfDaysInMonth(date);
     const maxBoxes = getMaxBoxes(windowWidth);
     const numberOfColumns = Math.min(maxBoxes, numberOfDaysInMonth);
-    
+
     useEffect(() => {
         const [leftBound, rightBound] = getBounds(date, maxBoxes, numberOfDaysInMonth);
         setBounds([leftBound, rightBound]);
 
         setLeftButton(leftBound === 1 ? false : true);
         setRightButton(rightBound === numberOfDaysInMonth ? false : true);
-    }, [windowWidth]);
+    }, [date, windowWidth]);
 
     useEffect(() => {
         const [leftBound, rightBound] = bounds;
 
         setLeftButton(leftBound === 1 ? false : true);
         setRightButton(rightBound === numberOfDaysInMonth ? false : true);
-    }, [bounds])
+    }, [bounds]);
 
     function shiftBoundsLeft() {
         let [leftBound, rightBound] = bounds;
 
-        if(leftBound - maxBoxes > 1) {
+        if (leftBound - maxBoxes > 1) {
             leftBound = leftBound - maxBoxes;
-            rightBound = rightBound - maxBoxes; 
+            rightBound = rightBound - maxBoxes;
         } else {
             leftBound = 1;
             rightBound = maxBoxes;
@@ -45,17 +45,17 @@ export default function Calendar() {
 
         setBounds([leftBound, rightBound]);
 
-        if(leftBound === 1) {
+        if (leftBound === 1) {
             setLeftButton(false);
         }
-    }
+    };
 
     function shiftBoundsRight() {
         let [leftBound, rightBound] = bounds;
 
-        if(rightBound + maxBoxes >= numberOfDaysInMonth) {
+        if (rightBound + maxBoxes >= numberOfDaysInMonth) {
             leftBound = numberOfDaysInMonth - maxBoxes + 1;
-            rightBound = numberOfDaysInMonth; 
+            rightBound = numberOfDaysInMonth;
         } else {
             leftBound = leftBound + maxBoxes;
             rightBound = rightBound + maxBoxes;
@@ -63,10 +63,10 @@ export default function Calendar() {
 
         setBounds([leftBound, rightBound]);
 
-        if(rightBound === numberOfDaysInMonth) {
+        if (rightBound === numberOfDaysInMonth) {
             setRightButton(false);
         }
-    }
+    };
 
     const headerProps = {
         bounds,
@@ -79,15 +79,15 @@ export default function Calendar() {
     };
 
     const habitsProps = {
-        bounds, 
+        bounds,
         numberOfColumns
-    }
+    };
 
 
     return (
         <div className="calendar">
-            <CalendarHeader {...headerProps}/>
-            <Habits {...habitsProps}/>
+            <CalendarHeader {...headerProps} />
+            <Habits {...habitsProps} />
         </div>
     )
 }
