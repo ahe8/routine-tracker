@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useDate } from "../contexts/DateContext";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 
-export default function Habits() {
+export default function Habits(props) {
   const [habits, setHabits] = useState([]);
   const [addingHabit, setAddingHabit] = useState(false);
   const [newHabitName, setNewHabitName] = useState("");
@@ -216,6 +216,7 @@ export default function Habits() {
       <Habit
         key={habit["routine_id"]}
         {...habit}
+        {...props}
         editing={editingHabit}
         handleEditChange={handleEditChange}
         handleDelete={handleDelete}

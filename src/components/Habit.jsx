@@ -1,24 +1,21 @@
 import { useState, useEffect } from "react";
-import { getYYYYMM, calendarBoxStyle, getNumberOfDaysInMonth, getMaxBoxes, getBounds } from "../utils";
+import { getYYYYMM, calendarBoxStyle, getNumberOfDaysInMonth } from "../utils";
 import HabitBox from "./HabitBox";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDate } from "../contexts/DateContext";
-import { useWindowWidth } from '@react-hook/window-size'
+
 
 export default function Habit(props) {
   const [habitRow, setHabitRow] = useState([]);
-  const { user_id, routine_id, routine_name, routine_yyyymm, routine_values, goal, handleEditChange, handleDelete, editing } = props;
+  const { user_id, routine_id, routine_name, routine_yyyymm, routine_values, goal, handleEditChange, handleDelete, editing, bounds, numberOfColumns } = props;
   const [tempBoxState, setTempBoxState] = useState(JSON.parse(routine_values));
   const [boxes, setBoxes] = useState(JSON.parse(routine_values));
 
   const { date } = useDate();
-  const windowWidth = useWindowWidth();
 
-  const maxBoxes = getMaxBoxes(windowWidth);
-  const numberOfColumns = Math.min(boxes.length , maxBoxes);
 
-  // debounce
   useEffect(() => {
+    // debounce
     const timeoutID = setTimeout(() => {
       if (JSON.stringify(tempBoxState) !== JSON.stringify(boxes)) {
         const body = {
@@ -72,11 +69,11 @@ export default function Habit(props) {
         );
       }
     }
-    
-    let bounds = getBounds(date, maxBoxes, boxes.length);
+
+    let [leftBound, rightBound] = bounds;
 
     newRow = newRow.concat(
-      tempList.slice(bounds[0] - 1, bounds[1])
+      tempList.slice(leftBound - 1, rightBound)
     );
 
     newRow.push(
@@ -95,7 +92,7 @@ export default function Habit(props) {
     );
 
     setHabitRow([newRow]);
-  }, [boxes, editing, windowWidth]);
+  }, [boxes, editing, bounds]);
 
   function handleGoalChange(e) {
     if (e.target.name === 'goal') {

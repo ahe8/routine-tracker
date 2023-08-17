@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react';
-import { daysMap, calendarBoxStyle, getNumberOfDaysInMonth, getYYYYMM } from '../utils';
+import { daysMap, calendarBoxStyle } from '../utils';
 import { Button } from "@mui/material";
 import { useDate } from "../contexts/DateContext";
-import { useWindowWidth } from '@react-hook/window-size'
-import { getMaxBoxes, getBounds } from '../utils';
 
-export default function CalendarHeader() {
+
+export default function CalendarHeader(props) {
     const [calendarHeaders, setCalendarHeaders] = useState([]);
 
     const { date, prevMonth, nextMonth, changeToPrevMonth, changeToNextMonth } = useDate();
-    const windowWidth = useWindowWidth();
-
-    const numberOfDaysInMonth = getNumberOfDaysInMonth(date);
-    const maxBoxes = getMaxBoxes(windowWidth);
-    const numberOfColumns = Math.min(maxBoxes, numberOfDaysInMonth);
+    const { bounds, numberOfColumns, shiftBoundsLeft, shiftBoundsRight, leftButton, rightButton } = props;
 
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -22,9 +17,9 @@ export default function CalendarHeader() {
         let daysOfWeek = [];
         let daysInMonth = [];
 
-        let bounds = getBounds(date, maxBoxes, numberOfDaysInMonth);
+        const [leftBound, rightBound] = bounds;
 
-        for (let day = bounds[0]; day <= bounds[1]; day++) {
+        for (let day = leftBound; day <= rightBound; day++) {
             let currDate = new Date(year, month, day).getDay();
             daysOfWeek.push(<small key={day} className="calendarBox">{daysMap[currDate]}</small>)
             daysInMonth.push(<p key={day} className="calendarBox">{day}</p>)
@@ -33,8 +28,10 @@ export default function CalendarHeader() {
         let daysOfWeekRow =
             <div key="0" style={calendarBoxStyle(numberOfColumns)}>
                 <span></span>
-                <span></span>
+                <Button onClick={shiftBoundsLeft} disabled={!leftButton} size="small">&lt;</Button>
                 {daysOfWeek}
+                <Button onClick={shiftBoundsRight} disabled={!rightButton} size="small">&gt;</Button>
+                <span></span>
             </div>
 
         let daysInMonthRow =
@@ -46,7 +43,7 @@ export default function CalendarHeader() {
                 <h4>Monthly Goal</h4>
             </div>
         setCalendarHeaders([daysOfWeekRow, daysInMonthRow]);
-    }, [date, windowWidth])
+    }, [date, bounds, leftButton, rightButton])
 
     return (
         <>
@@ -57,7 +54,7 @@ export default function CalendarHeader() {
                 <h3>{date.toLocaleString('default', { month: 'long' })} {year}</h3>
                 <Button variant="outlined" size="small" disabled={nextMonth} onClick={changeToNextMonth}>{">>"}</Button>
             </div>
-            
+
             {calendarHeaders}
         </>
     )
