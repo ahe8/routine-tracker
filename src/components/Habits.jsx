@@ -52,7 +52,6 @@ export default function Habits(props) {
           .then(data => setEarliestMonth(data));
       }
 
-
       return () => {
         // cancel the subscription
         isApiSubscribed = false;
@@ -167,10 +166,10 @@ export default function Habits(props) {
         body: JSON.stringify(updateData),
       });
 
-      await fetchHabits(currUser.id)
+      await fetchHabits(currUser.uid)
         .then(data => setHabits(data));
 
-      await fetchEarliestMonth(currUser.id)
+      await fetchEarliestMonth(currUser.uid)
         .then(data => setEarliestMonth(data));
 
       toggleEditingHabit();
@@ -209,7 +208,6 @@ export default function Habits(props) {
       console.log(err);
     }
   }
-
 
   let habitElements = habits
     .filter((habit) => habit["routine_yyyymm"] === getYYYYMM(date))
