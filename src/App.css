@@ -58,3 +58,20 @@
 .habitButton {
   border-radius: 0;
 }
+
+.editHabitButton{
+  margin: 1em;
+}
+
+.editHabitName {
+  margin-right: 0.2em;
+}
+
+body {
+  background: linear-gradient(
+    red 25%,
+    orange 25% 50%,
+    yellow 50% 75%,
+    green 75% 100%,
+  );
+}

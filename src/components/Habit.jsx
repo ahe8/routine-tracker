@@ -48,7 +48,7 @@ export default function Habit(props) {
 
     newRow.push(
       editing ?
-        <input key="routine_name" type="text" defaultValue={routine_name} name="routine_name" onChange={handleGoalChange} />
+        <input key="routine_name" className="editHabitName" type="text" defaultValue={routine_name} name="routine_name" onChange={handleGoalChange} />
         :
         <span key="routine_name" className="text-column">{routine_name}</span>
     );
@@ -93,6 +93,7 @@ export default function Habit(props) {
 
     setHabitRow([newRow]);
   }, [boxes, editing, bounds]);
+
 
   function handleGoalChange(e) {
     if (e.target.name === 'goal') {

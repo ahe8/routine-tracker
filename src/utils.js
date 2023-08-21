@@ -15,7 +15,7 @@ export const calendarStyle = (calendarRows) => ({
 
 export const calendarBoxStyle = (numberOfDaysInCurrMonth) => ({
     display: "grid",
-    margin: "1px",
+    marginBottom: "1px",
     gridColumnGap: "1px",
     gridTemplateColumns: `2em 8em repeat(${numberOfDaysInCurrMonth}, 4em) 5em 5em`
 
@@ -57,7 +57,7 @@ export const getBounds = (date, maxSize, calendarLength) => {
 export const getMaxBoxes = (windowWidth) => {
     const EM_TO_PX = 16; // using default font size of 16
 
-    const otherColumns = 20; //em    
+    const otherColumns = 20.2; //em    
 
     const padding = 1; //px
 

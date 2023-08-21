@@ -34,9 +34,9 @@ export default function Habits(props) {
   useEffect(() => {
     let isApiSubscribed = true;
     try {
-      fetchHabits(currUser.uid)
-        .then(data => {
-          if (isApiSubscribed) {
+      if (isApiSubscribed) {
+        fetchHabits(currUser.uid)
+          .then(data => {
             setHabits(data)
             if (getYYYYMM(date) === getYYYYMM(new Date())) {
               const currHabits = data.filter(habit => habit['routine_yyyymm'] === getYYYYMM(date));
@@ -47,10 +47,11 @@ export default function Habits(props) {
               }
             }
           }
-        })
+          )
+        fetchEarliestMonth(currUser.uid)
+          .then(data => setEarliestMonth(data));
+      }
 
-      fetchEarliestMonth(currUser.uid)
-        .then(data => setEarliestMonth(data));
 
       return () => {
         // cancel the subscription
@@ -254,11 +255,12 @@ export default function Habits(props) {
           <button className="editHabitButton" onClick={toggleEditingHabit}>
             Discard Changes
           </button>
-          <button onClick={handleEditSave}>
+          <button className="editHabitButton" onClick={handleEditSave}>
             Save Changes
           </button>
         </div>
       ) : (
+        !addingHabit &&
         <button onClick={toggleEditingHabit}>
           Edit
         </button>
@@ -269,7 +271,7 @@ export default function Habits(props) {
           Cancel
         </button>
       ) : (
-        getYYYYMM(new Date()) === getYYYYMM(date) && (
+        getYYYYMM(new Date()) === getYYYYMM(date) && !editingHabit && (
           <button className="newHabitButton" onClick={toggleAddingHabit}>
             Add Habit
           </button>
