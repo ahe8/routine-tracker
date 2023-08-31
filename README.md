@@ -1,4 +1,4 @@
-# Project Title
+# Routine Tracker
 
 A simple routine tracker.
 
