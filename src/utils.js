@@ -10,15 +10,15 @@ export const daysMap = {
 
 export const calendarStyle = (calendarRows) => ({
     display: "grid",
-    gridTemplateRows: `repeat(${calendarRows}, 4em)`
+    gridTemplateRows: `repeat(${calendarRows}, 4rem)`
 });
 
 export const calendarBoxStyle = (numberOfDaysInCurrMonth) => ({
     display: "grid",
     marginBottom: "1px",
     gridColumnGap: "1px",
-    gridTemplateColumns: `2em 8em repeat(${numberOfDaysInCurrMonth}, 4em) 5em 5em`
-
+    gridTemplateColumns: `2rem 5rem repeat(${numberOfDaysInCurrMonth}, 4rem) 5rem 5rem`,
+    overflowWrap: "anywhere"
 });
 
 export const getNumberOfDaysInMonth = (date) => {
@@ -57,7 +57,7 @@ export const getBounds = (date, maxSize, calendarLength) => {
 export const getMaxBoxes = (windowWidth) => {
     const EM_TO_PX = 16; // using default font size of 16
 
-    const otherColumns = 20.2; //em    
+    const otherColumns = 17.2; //em    
 
     const padding = 1; //px
 

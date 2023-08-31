@@ -24,7 +24,6 @@ export default function Layout() {
             backgroundColor: theme.primary.background,
             color: theme.primary.font,
             height: "100%",
-            overflow: "hidden",
             width: "100%",
           },
         }}

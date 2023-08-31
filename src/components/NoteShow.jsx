@@ -12,6 +12,7 @@ import {
 import DeleteIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/EditOutlined";
 import { useTheme } from "@mui/material/styles";
+import { useWindowWidth } from "@react-hook/window-size";
 
 function NoteShow({ note, onDelete, onEdit }) {
   const theme = useTheme();
@@ -19,6 +20,7 @@ function NoteShow({ note, onDelete, onEdit }) {
   const [showIcons, setShowIcons] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElForDelete, setAnchorElForDelete] = useState(null);
+  const windowWidth = useWindowWidth();
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -64,7 +66,7 @@ function NoteShow({ note, onDelete, onEdit }) {
     >
       <Box
         sx={{
-          width: 1000,
+          width: windowWidth * 0.9,
           border: 1,
           p: 3,
           m: 1,
